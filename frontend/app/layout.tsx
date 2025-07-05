@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
 import { Orbitron, Space_Grotesk } from "next/font/google";
+import { MainAppLayout } from "@/components/MainAppLayout";
 
 const fontHeading = Orbitron({
   weight: "700",
@@ -35,7 +36,9 @@ export default function RootLayout({
       <body
         className={`${fontHeading.variable} ${fontBody.variable} ${fontMono.variable} antialiased bg-noise`}
       >
-        <Providers>{children}</Providers>
+        <Providers>
+          <MainAppLayout>{children}</MainAppLayout>
+        </Providers>
       </body>
     </html>
   );
