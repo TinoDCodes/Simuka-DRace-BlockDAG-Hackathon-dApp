@@ -1,0 +1,60 @@
+{
+  "meetings": [
+    {
+      "id": "1",
+      "country": "Australia",
+      "title": "Flemington",
+      "meetingDate": "06-JUL-2025",
+      "races": [
+        {
+          "id": "1",
+          "status": "Open|Pending|Settled",
+          "raceNumber": 1,
+          "time": "12:00 PM",
+          "distance": 1200,
+          "name": "Race 1 Tab Next Gen Sprinters Series Final",
+          "runners": [
+            {
+              "id": "1",
+              "name": "Runner 1",
+              "jockey": "Jockey A",
+              "trainer": "Trainer X",
+              "barrier": 1,
+              "Number": 1,
+              "weight": 55.5,
+              "winOdds": 2.5,
+              "finalPosition": -1
+            },
+            {
+              "id": "2",
+              "name": "Runner 2",
+              "jockey": "Jockey B",
+              "trainer": "Trainer Y",
+              "barrier": 2,
+              "Number": 2,
+              "weight": 56.0,
+              "winOdds": 2.8,
+              "finalPosition": -1
+            }
+          ],
+          "pool": {
+            "totalLiquidity": 10000,
+            "LifeTime": 5000,
+            "breakdows": [
+              {
+                "id": "1",
+                "impliedOdds": 2.5,
+                "liquidity": 2500
+              },
+              {
+                "id": "2",
+                "impliedOdds": 2.8,
+                "liquidity": 2500
+              }
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
