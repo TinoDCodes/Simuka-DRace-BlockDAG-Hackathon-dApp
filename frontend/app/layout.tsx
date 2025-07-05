@@ -1,6 +1,24 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { Providers } from "./providers";
+import { Orbitron, Space_Grotesk } from "next/font/google";
+
+const fontHeading = Orbitron({
+  weight: "700",
+  subsets: ["latin"],
+  variable: "--font-heading",
+});
+const fontBody = Space_Grotesk({
+  weight: "400",
+  subsets: ["latin"],
+  variable: "--font-body",
+});
+// reuse Orbitron for numbers too
+const fontMono = Orbitron({
+  weight: "700",
+  subsets: ["latin"],
+  variable: "--font-number",
+});
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,7 +32,9 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" className="dark">
-      <body className={` antialiased`}>
+      <body
+        className={`${fontHeading.variable} ${fontBody.variable} ${fontMono.variable} antialiased bg-noise`}
+      >
         <Providers>{children}</Providers>
       </body>
     </html>
