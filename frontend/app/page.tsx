@@ -1,9 +1,9 @@
-import { CustomButton } from "@/components/ui/CustomButton";
+import RaceChainLanding from "@/components/LandingPage";
 
-export default function Home() {
+export default function Landing() {
   return (
-    <div>
-      <CustomButton color="clear">Hello</CustomButton>
+    <div className="px-4 sm:px-6 lg:px-8 max-w-[1440px] mx-auto">
+      <RaceChainLanding />
     </div>
   );
 }
