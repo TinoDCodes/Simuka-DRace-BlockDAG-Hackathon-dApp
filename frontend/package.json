@@ -10,9 +10,11 @@
   },
   "dependencies": {
     "@heroui/react": "^2.8.0-beta.11",
+    "@internationalized/date": "^3.8.2",
     "@rainbow-me/rainbowkit": "^2.2.8",
     "@tanstack/react-query": "^5.81.5",
     "framer-motion": "^12.23.0",
+    "moment": "^2.30.1",
     "next": "15.3.5",
     "react": "^19.0.0",
     "react-dom": "^19.0.0",

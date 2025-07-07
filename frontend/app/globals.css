@@ -52,6 +52,7 @@
     --color-primary: #9065ff;
     --color-primary-hover: #a277ff;
     --color-secondary: #22d3ee;
+    --color-tertiary: #228fee;
     --color-accent: #ff6b6b;
   }
 }
@@ -66,6 +67,7 @@
   --color-primary: var(--color-primary);
   --color-primary-50: var(--color-primary-hover);
   --color-secondary: var(--color-secondary);
+  --color-tertiary: var(--color-tertiary);
   --color-accent: var(--color-accent);
 
   /* override HeroUI’s font slots: */

@@ -71,7 +71,7 @@ const RaceChainLanding = () => {
               </div>
             </nav>
 
-            <Link href="/home">
+            <Link href="/meetings">
               <CustomButton color="primary">Get Started</CustomButton>
             </Link>
           </div>
@@ -100,7 +100,7 @@ const RaceChainLanding = () => {
               </motion.div>
 
               <div className="flex justify-center gap-4">
-                <Link href="/home">
+                <Link href="/meetings">
                   <CustomButton size="lg" color="primary">
                     Get Started
                   </CustomButton>
@@ -464,7 +464,7 @@ const RaceChainLanding = () => {
             Join RaceChain today and be part of the on-chain betting revolution.
           </p>
 
-          <Link href="/home">
+          <Link href="/meetings">
             <CustomButton color="primary" size="lg">
               Get Started Now
             </CustomButton>

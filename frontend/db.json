@@ -40,7 +40,7 @@
           "pool": {
             "totalLiquidity": 10000,
             "LifeTime": 5000,
-            "breakdows": [
+            "breakdowns": [
               {
                 "id": "1",
                 "impliedOdds": 2.5,
