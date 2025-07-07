@@ -10,12 +10,12 @@ export default async function MeetingsPage({
   const { date } = await searchParams;
 
   const selectedDate = date ? new Date(date) : new Date();
-  const selectedDateFormatted = moment(selectedDate)
-    .local(true)
-    .format("dddd, MMMM D, YYYY");
+  const selectedDateFormatted =
+    moment(selectedDate).format("dddd, MMMM D, YYYY");
 
   return (
     <div className="w-full flex flex-col items-center">
+      <p>{selectedDate.toDateString()}</p>
       <div className="w-fit py-1 px-3 border border-accent/15 rounded-xl text-xs text-accent mb-4">
         {selectedDateFormatted}
       </div>
