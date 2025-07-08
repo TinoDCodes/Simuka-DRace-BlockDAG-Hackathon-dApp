@@ -9,7 +9,7 @@ export function MainAppLayout({ children }: { children: React.ReactNode }) {
         <Header /> {/* Header component stays fixed at top */}
       </header>
 
-      <main className="flex-grow">{children}</main>
+      <main className="flex flex-col flex-grow">{children}</main>
 
       <footer>
         <Footer /> {/* Footer component stays fixed at bottom */}
