@@ -5,6 +5,7 @@ import LoadingOverlay from "../LoadingOverlay";
 import { useMeetingData } from "./MeetingData";
 import PaginationControl from "./PaginationControl";
 import { Meeting } from "@/utils/types";
+import Link from "next/link";
 
 type MeetingsViewProps = {
   date: string;
@@ -58,21 +59,22 @@ const MeetingsView = ({ date, page }: MeetingsViewProps) => {
 
             <div className="flex overflow-x-auto space-x-2 pb-1 scrollbar-thin scrollbar-thumb-[#333] col-span-8 flex-nowrap">
               {meeting.races.map((race) => (
-                <button
+                <Link
                   key={race.id}
+                  href={`/race/${race.id}`}
                   className={`
                   flex flex-col items-center px-3 py-2 rounded-lg text-sm font-semibold cursor-pointer transition-all
                   ${
                     race.status === "Settled"
                       ? "bg-[#3a3a50]/40 text-white/70 hover:scale-105"
-                      : "bg-[#2b2b35] text-white hover:bg-[#3a3a50]"
+                      : "bg-[#2b2b35]  hover:bg-[#3a3a50]"
                   }`}
                 >
-                  <div>R{race.raceNumber}</div>
+                  <div className="text-inherit">R{race.raceNumber}</div>
                   <span className="text-xs text-muted-foreground whitespace-nowrap font-medium">
                     {race.time}
                   </span>
-                </button>
+                </Link>
               ))}
             </div>
           </div>

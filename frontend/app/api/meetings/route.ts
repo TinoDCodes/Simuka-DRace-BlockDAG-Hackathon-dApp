@@ -1,12 +1,19 @@
 import { NextRequest, NextResponse } from "next/server";
 
 export async function GET(request: NextRequest) {
-  // const apiKey = process.env.MEETINGS_API_KEY;
-  const backendUrl = "http://localhost:3001/meetings";
   const date = request.nextUrl.searchParams.get("date");
+  // const apiKey = process.env.MEETINGS_API_KEY;
+  const backendUrl = process.env.BACKEND_BASE_URL;
+
+  if (!backendUrl || !date) {
+    return NextResponse.json(
+      { error: "Backend URL or date not found" },
+      { status: 500 }
+    );
+  }
 
   // You can build the backend request URL with query param
-  const url = `${backendUrl}?date=${encodeURIComponent(date ?? "")}`;
+  const url = `${backendUrl}/meetings`;
 
   const res = await fetch(url);
 
