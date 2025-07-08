@@ -1,8 +1,8 @@
-import { MeetingData } from "@/utils/types";
+import { Meeting } from "@/utils/types";
 import { useQuery } from "@tanstack/react-query";
 
 export const useMeetingData = (selectedDate: string) => {
-  const { data, isLoading, isError } = useQuery<MeetingData>({
+  const { data, isLoading, isError } = useQuery<Meeting[]>({
     queryKey: ["meetingData", selectedDate], // reactively refetch on date change
     queryFn: async () => {
       const response = await fetch(`/api/meetings?date=${selectedDate}`);

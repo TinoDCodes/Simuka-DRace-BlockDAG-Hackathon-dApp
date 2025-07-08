@@ -5,7 +5,7 @@ export default function MeetingsRoutesLayout({
 }) {
   return (
     <div className="flex flex-col items-center">
-      <h1 className="text-xl font-bold mb-2">Meetings</h1>
+      <h1 className="text-xl font-bold mb-2 lg:mb-1">Meetings</h1>
       {children}
     </div>
   );

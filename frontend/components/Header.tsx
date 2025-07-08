@@ -6,7 +6,7 @@ import LogoIcon from "@/public/DRace-logo-icon.png";
 
 const Header = () => {
   return (
-    <div className="flex items-center justify-between py-6">
+    <div className="flex items-center justify-between py-4">
       <Link href="/">
         <div className="flex items-center">
           <Image

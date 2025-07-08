@@ -17,8 +17,8 @@ export default async function MeetingsPage({
     moment(selectedDate).format("dddd, MMMM D, YYYY");
 
   return (
-    <div className="w-full flex flex-col items-center">
-      <div className="w-fit py-1 px-3 border border-accent/15 rounded-xl text-xs text-accent mb-4">
+    <div className="w-full flex flex-col items-center space-y-2">
+      <div className="w-fit py-1 px-3 border border-accent/15 rounded-xl text-xs text-accent">
         {selectedDateFormatted}
       </div>
 
