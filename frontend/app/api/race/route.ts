@@ -1,7 +1,7 @@
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const id = request.nextUrl.searchParams.get("id");
+  const id = request.nextUrl.searchParams.get("raceId");
   const backendUrl = process.env.BACKEND_BASE_URL;
 
   if (!backendUrl || !id) {

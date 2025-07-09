@@ -3323,7 +3323,7 @@
   ],
   "race": {
     "id": "1",
-    "status": "Open",
+    "status": "Pending",
     "raceNumber": 1,
     "time": "11:45 AM",
     "distance": 1000,
@@ -3349,7 +3349,7 @@
         "Number": 4,
         "weight": 55.0,
         "winOdds": 3.7,
-        "finalPosition": -1
+        "finalPosition": 2
       }
     ],
     "pool": {

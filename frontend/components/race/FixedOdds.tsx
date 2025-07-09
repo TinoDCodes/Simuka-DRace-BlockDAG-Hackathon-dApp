@@ -1,5 +1,90 @@
-const FixedOdds = () => {
-  return <div>FixedOdds</div>;
+import { Runner } from "@/utils/types";
+import {
+  Table,
+  TableBody,
+  TableColumn,
+  TableHeader,
+  TableRow,
+  TableCell,
+  Popover,
+  PopoverTrigger,
+  PopoverContent,
+  Chip,
+} from "@heroui/react";
+import { InfoIcon } from "lucide-react";
+
+type FixedOddsProps = {
+  runners: Runner[];
+};
+
+const FixedOdds = ({ runners }: FixedOddsProps) => {
+  return (
+    <Table
+      aria-label="Fixed Odds Table"
+      removeWrapper
+      className="w-full grow overflow-x-auto"
+      classNames={{ wrapper: "overflow-x-auto", th: "bg-primary/10" }}
+    >
+      <TableHeader>
+        <TableColumn width="50%" className="min-w-56">
+          Runner
+        </TableColumn>
+        <TableColumn className="text-center">Weight (kg)</TableColumn>
+        <TableColumn className="text-center">Barrier</TableColumn>
+        <TableColumn className="text-center">Win Odds</TableColumn>
+      </TableHeader>
+
+      <TableBody items={runners} emptyContent="No rows to display.">
+        {(runner) => (
+          <TableRow key={runner.id} textValue={runner.name}>
+            {/* Runner + Jockey + Info */}
+            <TableCell>
+              <div className="flex items-center space-x-8">
+                <div>
+                  <p className="font-medium line-clamp-2">{runner.name}</p>
+                  <p className="text-sm text-slate-400">{runner.jockey}</p>
+                </div>
+
+                <Popover placement="right">
+                  <PopoverTrigger>
+                    <InfoIcon className="w-5 h-5 text-slate-500 hover:text-slate-300" />
+                  </PopoverTrigger>
+
+                  <PopoverContent className="w-fit px-4 py-2 bg-slate-700/80 text-white rounded-lg shadow-lg">
+                    <p className="text-sm font-bold">
+                      Trainer:{" "}
+                      <span className="font-medium">{runner.trainer}</span>
+                    </p>
+                  </PopoverContent>
+                </Popover>
+
+                {runner.finalPosition > 0 && (
+                  <Chip isDisabled className="ml-auto font-medium px-4">
+                    {runner.finalPosition}
+                  </Chip>
+                )}
+              </div>
+            </TableCell>
+
+            {/* Weight */}
+            <TableCell className="text-center">
+              <span className="font-medium">{runner.weight.toFixed(1)}</span>
+            </TableCell>
+
+            {/* Barrier */}
+            <TableCell className="text-center">
+              <span className="font-medium">{runner.barrier}</span>
+            </TableCell>
+
+            {/* Win Odds */}
+            <TableCell className="text-center">
+              <span className="font-medium">{runner.winOdds.toFixed(1)}</span>
+            </TableCell>
+          </TableRow>
+        )}
+      </TableBody>
+    </Table>
+  );
 };
 
 export default FixedOdds;
