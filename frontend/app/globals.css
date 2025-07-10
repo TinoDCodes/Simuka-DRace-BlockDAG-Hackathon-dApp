@@ -21,6 +21,8 @@
   --color-primary-hover: #9065ff;
   --color-secondary: #22d3ee;
   --color-accent: #ff6b6b;
+  --color-green-accent: #10b77f; /* Vibrant teal-green */
+  --color-green-accent-hover: #12c78d; /* Slightly brighter variant */
 
   /* neutrals & borders */
   --color-muted-bg: #e5e7eb;
@@ -54,6 +56,8 @@
     --color-secondary: #228fee;
     --color-tertiary: #22d3ee;
     --color-accent: #ff6b6b;
+    --color-green-accent: #10b77f; /* Vibrant teal-green */
+    --color-green-accent-hover: #12c78d; /* Slightly brighter variant */
   }
 }
 
@@ -69,6 +73,8 @@
   --color-secondary: var(--color-secondary);
   --color-tertiary: var(--color-tertiary);
   --color-accent: var(--color-accent);
+  --color-green-accent: var(--color-green-accent);
+  --color-green-accent-hover: var(--color-green-accent-hover);
 
   /* override HeroUI’s font slots: */
   --font-sans: var(--font-body);

@@ -7,6 +7,7 @@ import TotePool from "./TotePool";
 import { useRouter } from "next/navigation";
 import { ChevronLeftIcon } from "lucide-react";
 import { CustomButton } from "../ui/CustomButton";
+import LoadingOverlay from "../LoadingOverlay";
 
 type RaceViewProps = {
   raceId: string;
@@ -17,7 +18,7 @@ const RaceView = ({ raceId }: RaceViewProps) => {
   const { raceData, isLoading, isError } = useRaceData(raceId);
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingOverlay />;
   }
 
   if (isError) {
@@ -76,8 +77,8 @@ const RaceView = ({ raceId }: RaceViewProps) => {
         <Tab key="fixed" title="Fixed Odds" className="grow flex flex-col">
           <FixedOdds runners={raceData.runners} />
         </Tab>
-        <Tab key="tote" title="TOTE Pool">
-          <TotePool />
+        <Tab key="tote" title="TOTE Pool" className="grow flex flex-col">
+          <TotePool pool={raceData.pool} />
         </Tab>
       </Tabs>
     </div>

@@ -10,8 +10,10 @@ import {
   PopoverTrigger,
   PopoverContent,
   Chip,
+  Button,
 } from "@heroui/react";
 import { InfoIcon } from "lucide-react";
+import PlaceFixedBetDrawer from "./PlaceFixedBetDrawer";
 
 type FixedOddsProps = {
   runners: Runner[];
@@ -46,7 +48,7 @@ const FixedOdds = ({ runners }: FixedOddsProps) => {
                 </div>
 
                 <Popover placement="right">
-                  <PopoverTrigger>
+                  <PopoverTrigger className="hover:cursor-pointer">
                     <InfoIcon className="w-5 h-5 text-slate-500 hover:text-slate-300" />
                   </PopoverTrigger>
 
@@ -78,7 +80,7 @@ const FixedOdds = ({ runners }: FixedOddsProps) => {
 
             {/* Win Odds */}
             <TableCell className="text-center">
-              <span className="font-medium">{runner.winOdds.toFixed(1)}</span>
+              <PlaceFixedBetDrawer runner={runner} />
             </TableCell>
           </TableRow>
         )}
