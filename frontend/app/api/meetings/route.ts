@@ -5,7 +5,7 @@ export async function GET(request: NextRequest) {
   // const apiKey = process.env.MEETINGS_API_KEY;
   const backendUrl = process.env.BACKEND_BASE_URL;
 
-  if (!backendUrl || !date) {
+  if (!backendUrl) {
     return NextResponse.json(
       { error: "Backend URL or date not found" },
       { status: 500 }
@@ -13,7 +13,7 @@ export async function GET(request: NextRequest) {
   }
 
   // You can build the backend request URL with query param
-  const url = `${backendUrl}/meetings`;
+  const url = `${backendUrl}/meetings${date ? `?date=${date}` : ""}`;
 
   const res = await fetch(url);
 

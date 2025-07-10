@@ -10,8 +10,8 @@ export default async function MeetingsPage({
   const { date, page } = await searchParams;
 
   const selectedDate = moment(date).isValid()
-    ? moment(date).toDate()
-    : moment().toDate();
+    ? moment(date).format("YYYY-MM-DD")
+    : undefined;
 
   const selectedDateFormatted =
     moment(selectedDate).format("dddd, MMMM D, YYYY");

@@ -3,39 +3,32 @@ import { DatePicker } from "@heroui/react";
 import { CustomButton } from "../ui/CustomButton";
 import { useRouter } from "next/navigation";
 import { CalendarDate, parseDate } from "@internationalized/date";
+import moment from "moment";
 
 type DateSelectProps = {
-  date: Date;
+  date?: string;
 };
 
 const DateSelect = ({ date }: DateSelectProps) => {
   const router = useRouter();
 
   // Get current date without time
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
+  const today = moment();
 
   // Get yesterday's date
-  const yesterday = new Date(today);
-  yesterday.setDate(yesterday.getDate() - 1);
-
-  // Normalize input date (remove time component)
-  const normalizedDate = new Date(date);
-  normalizedDate.setHours(0, 0, 0, 0);
+  const yesterday = moment().subtract(1, "days");
 
   // Check date comparisons
-  const isToday = normalizedDate.getTime() === today.getTime();
-  const isYesterday = normalizedDate.getTime() === yesterday.getTime();
+  const isToday = date ? today.isSame(moment(date), "day") : true;
+  const isYesterday = date ? yesterday.isSame(moment(date), "day") : false;
 
   const handlePickDate = (choosenDate: CalendarDate | null) => {
     if (!choosenDate) return;
 
-    const utcDate = new Date(
-      choosenDate.year,
-      choosenDate.month - 1,
-      choosenDate.day
-    ).toUTCString();
-    router.push(`/meetings?date=${utcDate}`);
+    const formattedDate = `${choosenDate.year}-${choosenDate.month
+      .toString()
+      .padStart(2, "0")}-${choosenDate.day.toString().padStart(2, "0")}`;
+    router.push(`/meetings?date=${formattedDate}`);
   };
 
   return (
@@ -46,7 +39,7 @@ const DateSelect = ({ date }: DateSelectProps) => {
           size="sm"
           isDisabled={isYesterday}
           onClick={() =>
-            router.push(`/meetings?date=${yesterday.toUTCString()}`)
+            router.push(`/meetings?date=${yesterday.format("YYYY-MM-DD")}`)
           }
         >
           Yesterday
@@ -56,15 +49,17 @@ const DateSelect = ({ date }: DateSelectProps) => {
           color="date"
           size="sm"
           isDisabled={isToday}
-          onClick={() => router.push(`/meetings?date=${today.toUTCString()}`)}
+          onClick={() =>
+            router.push(`/meetings?date=${today.format("YYYY-MM-DD")}`)
+          }
         >
           Today
         </CustomButton>
 
         <DatePicker
           aria-label="Pick a date"
-          value={getParsedDate(date)}
-          onChange={(choosenDate) => handlePickDate(choosenDate)}
+          value={parseDate(moment(date).format("YYYY-MM-DD"))}
+          onChange={(chosenDate) => handlePickDate(chosenDate)}
           showMonthAndYearPickers
           size="sm"
           variant="bordered"
@@ -76,12 +71,3 @@ const DateSelect = ({ date }: DateSelectProps) => {
 };
 
 export default DateSelect;
-
-/** Parse date string to Date for DatePicker */
-const getParsedDate = (date: Date) => {
-  const year = date.getFullYear();
-  const month = String(date.getMonth() + 1).padStart(2, "0");
-  const day = String(date.getDate()).padStart(2, "0");
-
-  return parseDate(`${year}-${month}-${day}`);
-};
