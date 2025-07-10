@@ -1,6 +1,6 @@
 "use client";
 
-import { HeroUIProvider } from "@heroui/react";
+import { HeroUIProvider, ToastProvider } from "@heroui/react";
 import "@rainbow-me/rainbowkit/styles.css";
 
 import {
@@ -26,7 +26,10 @@ export function Providers({ children }: { children: React.ReactNode }) {
     <WagmiProvider config={config}>
       <QueryClientProvider client={queryClient}>
         <RainbowKitProvider theme={midnightTheme()} modalSize="compact">
-          <HeroUIProvider>{children}</HeroUIProvider>
+          <HeroUIProvider>
+            <ToastProvider placement="top-center" toastOffset={10} />
+            {children}
+          </HeroUIProvider>
         </RainbowKitProvider>
       </QueryClientProvider>
     </WagmiProvider>

@@ -1,30 +1,51 @@
 import { Runner } from "@/utils/types";
 import {
   Button,
-  Chip,
   Drawer,
   DrawerBody,
   DrawerContent,
-  DrawerFooter,
   DrawerHeader,
   Input,
   useDisclosure,
+  addToast,
 } from "@heroui/react";
+import { useState } from "react";
+import { useAccount } from "wagmi";
 
 type PlaceFixedBetDrawerProps = {
   runner: Runner;
 };
 
 const PlaceFixedBetDrawer = ({ runner }: PlaceFixedBetDrawerProps) => {
+  const { isConnected } = useAccount();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
-  const potentialPayout = 324 * runner.winOdds;
+  const [betAmount, setBetAmount] = useState<number>(0);
+
+  const potentialPayout = betAmount * runner.winOdds;
+
+  const handleClickToOpenDrawer = () => {
+    if (!isConnected) {
+      addToast({
+        title: "Wallet Not Connected",
+        description: "Connect your wallet to place a bet",
+        color: "warning",
+        size: "md",
+      });
+    } else {
+      onOpen();
+    }
+  };
+
+  const handleBetAmountChange = (value: string) => {
+    setBetAmount(parseFloat(value));
+  };
 
   return (
     <>
       <Button
         className="bg-transparent text-[var(--color-primary)] font-medium font-mono border border-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 px-4 py-1 rounded-[var(--radius-base)] transition-colors"
-        onPress={onOpen}
+        onPress={() => handleClickToOpenDrawer()}
       >
         {runner.winOdds.toFixed(2)}
       </Button>
@@ -83,12 +104,14 @@ const PlaceFixedBetDrawer = ({ runner }: PlaceFixedBetDrawerProps) => {
                     Bet Amount
                   </h5>
                   <Input
+                    value={betAmount.toFixed(2)}
+                    onChange={(e) => handleBetAmountChange(e.target.value)}
                     name="betAmount"
                     type="number"
                     variant="bordered"
                     placeholder="0.00"
-                    // value={betAmount}
-                    // onChange={(e) => setBetAmount(e.target.value)}
+                    step={0.5}
+                    min={0.0}
                     endContent={
                       <div className="pointer-events-none flex items-center">
                         <span className="text-gray-400">$RACE</span>
@@ -122,13 +145,13 @@ const PlaceFixedBetDrawer = ({ runner }: PlaceFixedBetDrawerProps) => {
 
                 <div className="flex items-center justify-between space-x-6">
                   <Button
-                    className="w-full bg-transparent text-danger border border-danger hover:bg-danger/10 font-medium"
+                    className="w-full bg-transparent text-danger border border-danger hover:bg-danger/10 font-medium uppercase"
                     onPress={onClose}
                   >
                     Cancel
                   </Button>
                   <Button
-                    className="w-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] text-[#14161A] font-bold shadow-lg shadow-[var(--color-primary)]/30 transition-all hover:shadow-[var(--color-primary)]/50"
+                    className="w-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] text-[#14161A] font-bold shadow-lg shadow-[var(--color-primary)]/30 transition-all hover:shadow-[var(--color-primary)]/50 uppercase"
                     onPress={onClose}
                   >
                     Place Bet

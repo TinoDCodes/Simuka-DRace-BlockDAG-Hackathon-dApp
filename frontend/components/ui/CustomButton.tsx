@@ -11,6 +11,8 @@ export const CustomButton = extendVariants(Button, {
       outlined:
         "bg-transparent text-primary font-medium font-mono border border-primary hover:bg-transparent hover:text-primary/50 hover:border-primary/50 hover:scale-95 transition-all",
       date: "bg-white/5 text-zinc-400 font-mono hover:bg-secondary hover:text-white disabled:bg-secondary disabled:text-white disabled:opacity-75 transition-all",
+      account:
+        "bg-transparent text-white font-medium font-mono border border-primary/20",
     },
   },
   defaultVariants: {

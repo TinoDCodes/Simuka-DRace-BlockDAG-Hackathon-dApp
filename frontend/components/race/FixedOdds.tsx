@@ -10,7 +10,6 @@ import {
   PopoverTrigger,
   PopoverContent,
   Chip,
-  Button,
 } from "@heroui/react";
 import { InfoIcon } from "lucide-react";
 import PlaceFixedBetDrawer from "./PlaceFixedBetDrawer";
