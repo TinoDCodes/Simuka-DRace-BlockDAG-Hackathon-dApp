@@ -8,6 +8,7 @@ import { useRouter } from "next/navigation";
 import { ChevronLeftIcon } from "lucide-react";
 import { CustomButton } from "../ui/CustomButton";
 import LoadingOverlay from "../LoadingOverlay";
+import ErrorDisplay from "../ErrorDisplay";
 
 type RaceViewProps = {
   raceId: string;
@@ -15,14 +16,25 @@ type RaceViewProps = {
 
 const RaceView = ({ raceId }: RaceViewProps) => {
   const router = useRouter();
-  const { raceData, isLoading, isError } = useRaceData(raceId);
+  const { raceData, isLoading, isError, error, errorUpdatedAt, failureCount } =
+    useRaceData(raceId);
 
-  if (isLoading) {
+  if (isLoading && failureCount < 1) {
     return <LoadingOverlay />;
   }
 
   if (isError) {
-    return <div>Unexpected Error occured</div>;
+    return (
+      <ErrorDisplay
+        title="Error"
+        message={
+          error?.message ??
+          "There was an unexpected error while loading the race data."
+        }
+        errorCode={error?.cause as string}
+        lastUpdatedAt={errorUpdatedAt}
+      />
+    );
   }
 
   if (!raceData) {

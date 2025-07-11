@@ -6,6 +6,7 @@ import { useMeetingData } from "./MeetingData";
 import PaginationControl from "./PaginationControl";
 import { Meeting } from "@/utils/types";
 import Link from "next/link";
+import ErrorDisplay from "../ErrorDisplay";
 
 type MeetingsViewProps = {
   date: string;
@@ -15,7 +16,14 @@ type MeetingsViewProps = {
 const PAGE_SIZE = 10;
 
 const MeetingsView = ({ date, page }: MeetingsViewProps) => {
-  const { meetingData, isLoading, isError } = useMeetingData(date);
+  const {
+    meetingData,
+    isLoading,
+    isError,
+    error,
+    errorUpdatedAt,
+    failureCount,
+  } = useMeetingData(date);
   const [displayedMeetings, setDisplayedMeetings] = useState<Meeting[]>([]);
 
   const currentPage: number = parseInt(page) || 1;
@@ -29,12 +37,26 @@ const MeetingsView = ({ date, page }: MeetingsViewProps) => {
   }, [meetingData, currentPage]);
 
   // Loading state UI
-  if (isLoading) {
+  if (isLoading && failureCount < 1) {
     return <LoadingOverlay />;
   }
 
+  if (isError) {
+    return (
+      <ErrorDisplay
+        title="Error"
+        message={
+          error?.message ??
+          "There was an unexpected error while loading the race data."
+        }
+        errorCode={error?.cause as string}
+        lastUpdatedAt={errorUpdatedAt}
+      />
+    );
+  }
+
   // Empty data or Error state UI
-  if (!meetingData || meetingData.length === 0 || isError)
+  if (!meetingData || meetingData.length === 0)
     return <div className="text-muted">No meetings found.</div>;
 
   return (

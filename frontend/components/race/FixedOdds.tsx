@@ -35,19 +35,22 @@ const FixedOdds = ({ runners }: FixedOddsProps) => {
         <TableColumn className="text-center">Win Odds</TableColumn>
       </TableHeader>
 
-      <TableBody items={runners} emptyContent="No rows to display.">
+      <TableBody items={runners} emptyContent="No runners found">
         {(runner) => (
           <TableRow key={runner.id} textValue={runner.name}>
             {/* Runner + Jockey + Info */}
             <TableCell>
-              <div className="flex items-center space-x-8">
+              <div className="flex items-center space-x-4">
+                <div className="flex items-center justify-center text-lg font-medium text-white/80">
+                  {runner.Number}
+                </div>
                 <div>
                   <p className="font-medium line-clamp-2">{runner.name}</p>
                   <p className="text-sm text-slate-400">{runner.jockey}</p>
                 </div>
 
                 <Popover placement="right">
-                  <PopoverTrigger className="hover:cursor-pointer">
+                  <PopoverTrigger className="hover:cursor-pointer ml-4">
                     <InfoIcon className="w-5 h-5 text-slate-500 hover:text-slate-300" />
                   </PopoverTrigger>
 
