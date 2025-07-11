@@ -9,7 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const RaceChainLanding = () => {
-  const launchDate = useMemo(() => new Date("2025-07-30T00:00:00Z"), []);
+  const launchDate = useMemo(() => new Date("2025-07-22T00:00:00Z"), []);
   const [timeLeft, setTimeLeft] = useState({
     days: "--",
     hours: "--",
@@ -72,7 +72,7 @@ const RaceChainLanding = () => {
             </nav>
 
             <Link href="/meetings">
-              <CustomButton color="primary">Get Started</CustomButton>
+              <CustomButton color="primary">Go to dApp</CustomButton>
             </Link>
           </div>
         </div>
@@ -466,7 +466,7 @@ const RaceChainLanding = () => {
 
           <Link href="/meetings">
             <CustomButton color="primary" size="lg">
-              Get Started Now
+              Start Betting
             </CustomButton>
           </Link>
         </div>

@@ -7,6 +7,7 @@ import PaginationControl from "./PaginationControl";
 import { Meeting } from "@/utils/types";
 import Link from "next/link";
 import ErrorDisplay from "../ErrorDisplay";
+import { CalendarX2Icon } from "lucide-react";
 
 type MeetingsViewProps = {
   date: string;
@@ -41,6 +42,7 @@ const MeetingsView = ({ date, page }: MeetingsViewProps) => {
     return <LoadingOverlay />;
   }
 
+  // Error state UI
   if (isError) {
     return (
       <ErrorDisplay
@@ -55,9 +57,20 @@ const MeetingsView = ({ date, page }: MeetingsViewProps) => {
     );
   }
 
-  // Empty data or Error state UI
-  if (!meetingData || meetingData.length === 0)
-    return <div className="text-muted">No meetings found.</div>;
+  // When data is undefined, return null
+  if (!meetingData) return null;
+
+  // Empty data UI
+  if (meetingData.length === 0)
+    return (
+      <div className="grow flex flex-col items-center justify-center text-center px-4 py-12 text-white/60">
+        <CalendarX2Icon className="w-10 h-10 mb-4 text-white/30" />
+        <p className="text-lg font-mono">No meetings found</p>
+        <p className="text-sm mt-1 text-white/40">
+          Try selecting a different date above.
+        </p>
+      </div>
+    );
 
   return (
     <div className="flex flex-col flex-grow w-full">

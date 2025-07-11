@@ -38,7 +38,7 @@ const RaceView = ({ raceId }: RaceViewProps) => {
   }
 
   if (!raceData) {
-    return <div>No race data found</div>;
+    return null;
   }
 
   return (

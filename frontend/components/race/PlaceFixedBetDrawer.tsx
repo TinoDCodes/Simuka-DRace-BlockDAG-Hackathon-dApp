@@ -20,6 +20,7 @@ const PlaceFixedBetDrawer = ({ runner }: PlaceFixedBetDrawerProps) => {
   const { isConnected } = useAccount();
   const { isOpen, onOpen, onOpenChange } = useDisclosure();
 
+  const [inputValue, setInputValue] = useState<string>("0.00");
   const [betAmount, setBetAmount] = useState<number>(0);
 
   const potentialPayout = betAmount * runner.winOdds;
@@ -37,8 +38,33 @@ const PlaceFixedBetDrawer = ({ runner }: PlaceFixedBetDrawerProps) => {
     }
   };
 
+  const handleCloseDrawer = (isOpen: boolean) => {
+    if (!isOpen) {
+      setInputValue("0.00");
+      setBetAmount(0);
+    }
+    onOpenChange();
+  };
+
   const handleBetAmountChange = (value: string) => {
-    setBetAmount(parseFloat(value));
+    // Only allow numbers with up to 2 decimal places
+    const regex = /^\d*(\.\d{0,2})?$/;
+
+    if (value === "" || regex.test(value)) {
+      setInputValue(value);
+
+      const parsed = parseFloat(value);
+      if (!isNaN(parsed)) {
+        setBetAmount(parsed);
+      } else {
+        setBetAmount(0);
+      }
+    }
+  };
+
+  const handlePlaceBet = async () => {
+    // TODO: Implement
+    console.log("Bet amount:", betAmount);
   };
 
   return (
@@ -49,7 +75,10 @@ const PlaceFixedBetDrawer = ({ runner }: PlaceFixedBetDrawerProps) => {
       >
         {runner.winOdds.toFixed(2)}
       </Button>
-      <Drawer isOpen={isOpen} onOpenChange={onOpenChange}>
+      <Drawer
+        isOpen={isOpen}
+        onOpenChange={(isOpen) => handleCloseDrawer(isOpen)}
+      >
         <DrawerContent>
           {(onClose) => (
             <>
@@ -91,8 +120,8 @@ const PlaceFixedBetDrawer = ({ runner }: PlaceFixedBetDrawerProps) => {
                     Bet Type
                   </h5>
                   <Button
-                    disabled
-                    className="bg-primary w-fit font-medium font-heading opacity-60 hover:bg-primary hover:opacity-60 disabled:hover:opacity-60 disabled:hover:cursor-default"
+                    isDisabled
+                    className="bg-primary w-fit font-medium font-heading"
                   >
                     Win
                   </Button>
@@ -104,25 +133,24 @@ const PlaceFixedBetDrawer = ({ runner }: PlaceFixedBetDrawerProps) => {
                     Bet Amount
                   </h5>
                   <Input
-                    value={betAmount.toFixed(2)}
+                    value={inputValue}
                     onChange={(e) => handleBetAmountChange(e.target.value)}
                     name="betAmount"
-                    type="number"
-                    variant="bordered"
+                    type="text"
+                    inputMode="decimal"
                     placeholder="0.00"
-                    step={0.5}
-                    min={0.0}
-                    endContent={
-                      <div className="pointer-events-none flex items-center">
-                        <span className="text-gray-400">$RACE</span>
-                      </div>
-                    }
+                    step={0.05}
                     classNames={{
                       inputWrapper:
                         "focus-within:ring-2 ring-primary/50 focus-within:border-none",
                       input:
                         "border-none focus-within:ring-0 focus-within:border-none focus-within:outline-0 font-mono text-lg placeholder:text-muted-foreground/50",
                     }}
+                    endContent={
+                      <div className="pointer-events-none flex items-center">
+                        <span className="text-gray-400">$RACE</span>
+                      </div>
+                    }
                   />
                 </div>
 
@@ -145,14 +173,15 @@ const PlaceFixedBetDrawer = ({ runner }: PlaceFixedBetDrawerProps) => {
 
                 <div className="flex items-center justify-between space-x-6">
                   <Button
-                    className="w-full bg-transparent text-danger border border-danger hover:bg-danger/10 font-medium uppercase"
+                    className="w-full bg-transparent text-danger border border-danger hover:bg-danger/10 font-semibold uppercase"
                     onPress={onClose}
                   >
                     Cancel
                   </Button>
                   <Button
+                    isDisabled={betAmount === 0}
                     className="w-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] text-[#14161A] font-bold shadow-lg shadow-[var(--color-primary)]/30 transition-all hover:shadow-[var(--color-primary)]/50 uppercase"
-                    onPress={onClose}
+                    onPress={handlePlaceBet}
                   >
                     Place Bet
                   </Button>
