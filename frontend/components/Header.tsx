@@ -16,6 +16,7 @@ import {
 import { Menu, User2Icon, WalletIcon } from "lucide-react";
 import { motion } from "framer-motion";
 import { CustomButton } from "./ui/CustomButton";
+import TokenBalance from "./TokenBalance";
 
 const Header = () => {
   return (
@@ -32,6 +33,8 @@ const Header = () => {
           <h1 className="text-gradient lg:text-lg font-extrabold">RaceChain</h1>
         </div>
       </Link>
+
+      <TokenBalance />
 
       <div className="flex md:hidden">
         <UserMenu />

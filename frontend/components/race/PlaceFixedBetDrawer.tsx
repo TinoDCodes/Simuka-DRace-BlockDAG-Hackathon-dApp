@@ -1,3 +1,4 @@
+import { usePlaceFixedBet } from "@/hooks/betting-contract";
 import { Runner } from "@/utils/types";
 import {
   Button,
@@ -18,7 +19,8 @@ type PlaceFixedBetDrawerProps = {
 
 const PlaceFixedBetDrawer = ({ runner }: PlaceFixedBetDrawerProps) => {
   const { isConnected } = useAccount();
-  const { isOpen, onOpen, onOpenChange } = useDisclosure();
+  const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
+  const { placeFixedBet, isLoading } = usePlaceFixedBet();
 
   const [inputValue, setInputValue] = useState<string>("0.00");
   const [betAmount, setBetAmount] = useState<number>(0);
@@ -63,8 +65,11 @@ const PlaceFixedBetDrawer = ({ runner }: PlaceFixedBetDrawerProps) => {
   };
 
   const handlePlaceBet = async () => {
-    // TODO: Implement
-    console.log("Bet amount:", betAmount);
+    // TODO: add betId
+    await placeFixedBet(3, betAmount, runner.winOdds, 2);
+    setInputValue("0.00");
+    setBetAmount(0);
+    onClose();
   };
 
   return (
@@ -179,11 +184,12 @@ const PlaceFixedBetDrawer = ({ runner }: PlaceFixedBetDrawerProps) => {
                     Cancel
                   </Button>
                   <Button
-                    isDisabled={betAmount === 0}
+                    isDisabled={betAmount === 0 || isLoading}
+                    isLoading={isLoading}
                     className="w-full bg-gradient-to-r from-[var(--color-primary)] to-[var(--color-secondary)] text-[#14161A] font-bold shadow-lg shadow-[var(--color-primary)]/30 transition-all hover:shadow-[var(--color-primary)]/50 uppercase"
                     onPress={handlePlaceBet}
                   >
-                    Place Bet
+                    {isLoading ? "Placing Bet..." : "Place Bet"}
                   </Button>
                 </div>
               </DrawerBody>

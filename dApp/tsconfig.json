@@ -7,5 +7,12 @@
     "strict": true,
     "skipLibCheck": true,
     "resolveJsonModule": true
-  }
+  },
+  "include": [
+    // for Hardhat:
+    "contracts",
+    "typechain-types",
+    "scripts",
+    "test"
+  ]
 }
