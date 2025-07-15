@@ -1,12 +1,14 @@
 import { Race } from "@/utils/types";
 import { useQuery } from "@tanstack/react-query";
 
-export const useRaceData = (raceId: string) => {
+export const useRaceData = (meetingId: string, raceId: string) => {
   const { data, isLoading, isError, error, errorUpdatedAt, failureCount } =
     useQuery<Race>({
-      queryKey: ["race", raceId],
+      queryKey: ["race", meetingId, raceId],
       queryFn: async () => {
-        const res = await fetch(`/api/race?raceId=${raceId}`);
+        const res = await fetch(
+          `/api/race?meetingId=${meetingId}&raceId=${raceId}`
+        );
 
         if (!res.ok) {
           throw new Error(

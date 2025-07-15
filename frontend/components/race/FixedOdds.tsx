@@ -1,4 +1,4 @@
-import { Runner } from "@/utils/types";
+import { RaceStatus, Runner } from "@/utils/types";
 import {
   Table,
   TableBody,
@@ -15,10 +15,11 @@ import { InfoIcon } from "lucide-react";
 import PlaceFixedBetDrawer from "./PlaceFixedBetDrawer";
 
 type FixedOddsProps = {
+  raceStatus: RaceStatus;
   runners: Runner[];
 };
 
-const FixedOdds = ({ runners }: FixedOddsProps) => {
+const FixedOdds = ({ runners, raceStatus }: FixedOddsProps) => {
   return (
     <Table
       aria-label="Fixed Odds Table"
@@ -37,7 +38,11 @@ const FixedOdds = ({ runners }: FixedOddsProps) => {
 
       <TableBody items={runners} emptyContent="No runners found">
         {(runner) => (
-          <TableRow key={runner.id} textValue={runner.name}>
+          <TableRow
+            key={runner.id}
+            textValue={runner.name}
+            className={`${runner.scratched ? "opacity-50" : ""}`}
+          >
             {/* Runner + Jockey + Info */}
             <TableCell>
               <div className="flex items-center space-x-4">
@@ -45,8 +50,12 @@ const FixedOdds = ({ runners }: FixedOddsProps) => {
                   {runner.Number}
                 </div>
                 <div>
-                  <p className="font-medium line-clamp-2">{runner.name}</p>
-                  <p className="text-sm text-slate-400">{runner.jockey}</p>
+                  <p className="font-medium line-clamp-2 text-nowrap">
+                    {runner.name}
+                  </p>
+                  <p className="text-sm text-slate-400 text-nowrap">
+                    {runner.jockey}
+                  </p>
                 </div>
 
                 <Popover placement="right">
@@ -63,7 +72,14 @@ const FixedOdds = ({ runners }: FixedOddsProps) => {
                 </Popover>
 
                 {runner.finalPosition > 0 && (
-                  <Chip isDisabled className="ml-auto font-medium px-4">
+                  <Chip
+                    isDisabled
+                    className={`ml-auto font-medium px-4 ${
+                      runner.finalPosition === 1
+                        ? "bg-green-accent/30 opacity-100"
+                        : "bg-accent/20 opacity-80"
+                    } text-white `}
+                  >
                     {runner.finalPosition}
                   </Chip>
                 )}
@@ -72,7 +88,9 @@ const FixedOdds = ({ runners }: FixedOddsProps) => {
 
             {/* Weight */}
             <TableCell className="text-center">
-              <span className="font-medium">{runner.weight.toFixed(1)}</span>
+              <span className="font-medium">
+                {runner.weight ? runner.weight.toFixed(1) : "-"}
+              </span>
             </TableCell>
 
             {/* Barrier */}
@@ -82,7 +100,11 @@ const FixedOdds = ({ runners }: FixedOddsProps) => {
 
             {/* Win Odds */}
             <TableCell className="text-center">
-              <PlaceFixedBetDrawer runner={runner} />
+              <PlaceFixedBetDrawer
+                isDisabled={runner.scratched}
+                isRaceResulted={raceStatus === "RESULTED"}
+                runner={runner}
+              />
             </TableCell>
           </TableRow>
         )}

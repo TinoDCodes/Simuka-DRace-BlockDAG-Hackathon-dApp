@@ -6,6 +6,7 @@ import { TokenContractABI } from "@/utils/abis";
 import { useEffect, useState } from "react";
 
 const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_SEPOLIA_CONTRACT_ADDRESS!;
+const TOKEN_ADDRESS = process.env.NEXT_PUBLIC_TEST_RACE_COIN_ADDRESS!;
 
 export const usePlaceFixedBet = () => {
   const { writeContractAsync } = useWriteContract();
@@ -58,7 +59,7 @@ export const usePlaceFixedBet = () => {
       // 2) approve
       await writeContractAsync(
         {
-          address: "0x6F5d380687dcE063bD0fFee54aF13C616064Bf22",
+          address: `0x${TOKEN_ADDRESS}`,
           abi: TokenContractABI,
           functionName: "approve",
           args: [`0x${CONTRACT_ADDRESS}`, stakeBN],

@@ -8,10 +8,15 @@ export const useMeetingData = (selectedDate: string) => {
       queryFn: async () => {
         const response = await fetch(`/api/meetings?date=${selectedDate}`);
 
-        if (!response.ok)
-          throw new Error("There was an error fetching the meeting data.", {
-            cause: response.status,
-          });
+        if (!response.ok) {
+          if (response.status === 404) {
+            return [];
+          } else {
+            throw new Error("There was an error fetching the meeting data.", {
+              cause: response.status,
+            });
+          }
+        }
 
         return await response.json();
       },

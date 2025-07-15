@@ -11,13 +11,14 @@ import LoadingOverlay from "../LoadingOverlay";
 import ErrorDisplay from "../ErrorDisplay";
 
 type RaceViewProps = {
+  meetingId: string;
   raceId: string;
 };
 
-const RaceView = ({ raceId }: RaceViewProps) => {
+const RaceView = ({ meetingId, raceId }: RaceViewProps) => {
   const router = useRouter();
   const { raceData, isLoading, isError, error, errorUpdatedAt, failureCount } =
-    useRaceData(raceId);
+    useRaceData(meetingId, raceId);
 
   if (isLoading && failureCount < 1) {
     return <LoadingOverlay />;
@@ -58,9 +59,9 @@ const RaceView = ({ raceId }: RaceViewProps) => {
           <div className="flex items-center space-x-3 mt-1">
             <Badge
               color={
-                raceData.status === "Open"
+                raceData.status === "OPEN"
                   ? "success"
-                  : raceData.status === "Pending"
+                  : raceData.status === "INRUNNING"
                   ? "warning"
                   : "danger"
               }
@@ -87,7 +88,7 @@ const RaceView = ({ raceId }: RaceViewProps) => {
         }}
       >
         <Tab key="fixed" title="Fixed Odds" className="grow flex flex-col">
-          <FixedOdds runners={raceData.runners} />
+          <FixedOdds runners={raceData.runners} raceStatus={raceData.status} />
         </Tab>
         <Tab key="tote" title="TOTE Pool" className="grow flex flex-col">
           <TotePool pool={raceData.pool} />

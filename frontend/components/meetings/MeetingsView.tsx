@@ -8,6 +8,8 @@ import { Meeting } from "@/utils/types";
 import Link from "next/link";
 import ErrorDisplay from "../ErrorDisplay";
 import { CalendarX2Icon } from "lucide-react";
+import moment from "moment";
+import { Chip } from "@heroui/react";
 
 type MeetingsViewProps = {
   date: string;
@@ -78,29 +80,39 @@ const MeetingsView = ({ date, page }: MeetingsViewProps) => {
         {displayedMeetings.map((meeting) => (
           <div
             key={meeting.id}
-            className="w-full bg-primary/10 p-4 rounded-xl shadow-md border border-[#2A2A35] flex flex-col lg:grid lg:grid-cols-10 lg:gap-6 overflow-x-hidden"
+            className="w-full bg-primary/10 p-4 rounded-xl shadow-md border border-[#2A2A35] flex flex-col lg:grid lg:grid-cols-10 xl:grid-cols-12 lg:gap-6 overflow-x-hidden"
           >
-            <div className="flex flex-col justify-center space-y-2 col-span-2 mb-2 lg:mb-0">
+            <div className="flex flex-col justify-center space-y-1 col-span-2 xl:col-span-4 mb-2 lg:mb-0">
               <div className="flex items-center space-x-2">
                 <h2 className="text-lg font-bold text-white line-clamp-1">
                   {meeting.title}
                 </h2>
-                <span className="text-xs px-2 py-1 rounded bg-red-600 text-white font-medium shrink-0">
-                  LIVE
-                </span>
+
+                {checkIsLive(meeting.meetingDate) && (
+                  <Chip color="danger" size="sm" variant="shadow" className="">
+                    LIVE
+                  </Chip>
+                )}
               </div>
-              <p className="text-sm text-muted-foreground">{meeting.country}</p>
+              <div className="flex flex-col space-y-0.5">
+                <p className="text-sm text-muted-foreground">
+                  {meeting.country}
+                </p>
+                <p className="text-xs text-accent">
+                  {moment(meeting.meetingDate).format("DD MMM YYYY")}
+                </p>
+              </div>
             </div>
 
-            <div className="flex overflow-x-auto space-x-2 pb-1 scrollbar-thin scrollbar-thumb-[#333] col-span-8 flex-nowrap">
+            <div className="flex flex-nowrap overflow-x-auto scrollbar-thin scrollbar-thumb-[#333] lg:flex-wrap gap-2 pb-1 col-span-8">
               {meeting.races.map((race) => (
                 <Link
                   key={race.id}
-                  href={`/race/${race.id}`}
+                  href={`meeting/${meeting.id}/race/${race.id}`}
                   className={`
-                  flex flex-col items-center px-3 py-2 rounded-lg text-sm font-semibold cursor-pointer transition-all
+                  flex flex-col h-fit items-center px-3 py-2 rounded-lg text-sm font-semibold cursor-pointer transition-all
                   ${
-                    race.status === "Settled"
+                    race.status === "RESULTED"
                       ? "bg-[#3a3a50]/40 text-white/70 hover:scale-105"
                       : "bg-[#2b2b35]  hover:bg-[#3a3a50]"
                   }`}
@@ -116,15 +128,24 @@ const MeetingsView = ({ date, page }: MeetingsViewProps) => {
         ))}
       </div>
 
-      <div className="mt-auto pt-6">
-        <PaginationControl
-          total={meetingData.length}
-          itemsPerPage={PAGE_SIZE}
-          page={currentPage}
-        />
-      </div>
+      {meetingData.length > PAGE_SIZE && (
+        <div className="mt-auto pt-6">
+          <PaginationControl
+            total={meetingData.length}
+            itemsPerPage={PAGE_SIZE}
+            page={currentPage}
+          />
+        </div>
+      )}
     </div>
   );
 };
 
 export default MeetingsView;
+
+const checkIsLive = (meetingDate: string) => {
+  const today = moment();
+  const meetingDateMoment = moment(meetingDate);
+
+  return today.isSame(meetingDateMoment, "day");
+};

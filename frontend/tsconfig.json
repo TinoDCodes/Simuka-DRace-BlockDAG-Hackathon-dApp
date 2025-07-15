@@ -20,7 +20,7 @@
     ],
     "paths": {
       "@/*": ["./*"],
-      "typechain/*": ["../dApp/typechain-types/*"]
+      "typechain/*": ["./lib/typechain-types/*"]
     }
   },
   "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", ".next/types/**/*.ts"],

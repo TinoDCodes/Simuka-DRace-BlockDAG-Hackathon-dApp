@@ -34,17 +34,19 @@ const Header = () => {
         </div>
       </Link>
 
-      <TokenBalance />
+      <section className="flex items-center gap-3">
+        <TokenBalance />
 
-      <div className="flex md:hidden">
-        <UserMenu />
-      </div>
+        <div className="flex md:hidden">
+          <UserMenu />
+        </div>
 
-      <div className="hidden md:flex items-center gap-4">
-        <ViewBetsButton />
+        <div className="hidden md:flex items-center gap-4">
+          <ViewBetsButton />
 
-        <ConnectButton showBalance={false} />
-      </div>
+          <ConnectButton showBalance={false} />
+        </div>
+      </section>
     </div>
   );
 };

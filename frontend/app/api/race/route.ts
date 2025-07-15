@@ -1,12 +1,22 @@
 import { NextRequest } from "next/server";
 
 export async function GET(request: NextRequest) {
-  const id = request.nextUrl.searchParams.get("raceId");
+  const meetingId = request.nextUrl.searchParams.get("meetingId");
+  const raceId = request.nextUrl.searchParams.get("raceId");
   const backendUrl = process.env.BACKEND_BASE_URL;
 
-  if (!backendUrl || !id) {
+  if (!backendUrl) {
     return new Response(
-      JSON.stringify({ error: "Backend URL or race ID not found" }),
+      JSON.stringify({ error: "Backend Base URL not defined" }),
+      {
+        status: 500,
+      }
+    );
+  }
+
+  if (!meetingId || !raceId) {
+    return new Response(
+      JSON.stringify({ error: "Meeting ID or race ID not found" }),
       {
         status: 500,
       }
@@ -14,7 +24,7 @@ export async function GET(request: NextRequest) {
   }
 
   // You can build the backend request URL with query param
-  const url = `${backendUrl}/race`;
+  const url = `${backendUrl}/Racing/meetings/${meetingId}/races/${raceId}`;
 
   const res = await fetch(url);
 

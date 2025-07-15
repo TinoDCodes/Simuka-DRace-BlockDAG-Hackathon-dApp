@@ -1,6 +1,7 @@
 import { useTokenAccount } from "@/hooks/token-account";
 import { ethers } from "ethers";
 import { motion, AnimatePresence } from "framer-motion";
+import { Wallet } from "lucide-react";
 import { useState, useEffect } from "react";
 
 const TokenBalance = () => {
@@ -38,7 +39,9 @@ const TokenBalance = () => {
       className="flex items-center gap-2 font-mono"
       onClick={() => refetch()}
     >
-      <div className="w-3 h-3 rounded-full bg-[var(--color-primary)]" />
+      <div className="hidden md:block w-3 h-3 rounded-full bg-[var(--color-primary)]" />
+
+      <Wallet className="md:hidden w-5 h-5 text-primary" />
 
       <AnimatePresence mode="wait">
         <motion.span
@@ -53,7 +56,7 @@ const TokenBalance = () => {
         </motion.span>
       </AnimatePresence>
 
-      <span className="text-sm text-gray-400">RACE</span>
+      <span className="hidden md:block text-sm text-gray-400">RACE</span>
     </button>
   );
 };

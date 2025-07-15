@@ -1,6 +1,8 @@
 import { TokenContractABI } from "@/utils/abis";
 import { useAccount, useReadContract } from "wagmi";
 
+const TOKEN_ADDRESS = process.env.NEXT_PUBLIC_TEST_RACE_COIN_ADDRESS!;
+
 export const useTokenAccount = () => {
   const { address } = useAccount();
 
@@ -9,7 +11,7 @@ export const useTokenAccount = () => {
     isLoading,
     refetch,
   } = useReadContract({
-    address: "0x6F5d380687dcE063bD0fFee54aF13C616064Bf22",
+    address: `0x${TOKEN_ADDRESS}`,
     abi: TokenContractABI,
     functionName: "balanceOf",
     args: [address],

@@ -14,10 +14,16 @@ import { useState } from "react";
 import { useAccount } from "wagmi";
 
 type PlaceFixedBetDrawerProps = {
+  isDisabled: boolean;
   runner: Runner;
+  isRaceResulted: boolean;
 };
 
-const PlaceFixedBetDrawer = ({ runner }: PlaceFixedBetDrawerProps) => {
+const PlaceFixedBetDrawer = ({
+  runner,
+  isDisabled,
+  isRaceResulted,
+}: PlaceFixedBetDrawerProps) => {
   const { isConnected } = useAccount();
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
   const { placeFixedBet, isLoading } = usePlaceFixedBet();
@@ -33,6 +39,12 @@ const PlaceFixedBetDrawer = ({ runner }: PlaceFixedBetDrawerProps) => {
         title: "Wallet Not Connected",
         description: "Connect your wallet to place a bet",
         color: "warning",
+        size: "md",
+      });
+    } else if (isRaceResulted) {
+      addToast({
+        title: "Race Completed!",
+        description: "Bets are no longer available for this race",
         size: "md",
       });
     } else {
@@ -76,6 +88,7 @@ const PlaceFixedBetDrawer = ({ runner }: PlaceFixedBetDrawerProps) => {
     <>
       <Button
         className="bg-transparent text-[var(--color-primary)] font-medium font-mono border border-[var(--color-primary)] hover:bg-[var(--color-primary)]/10 px-4 py-1 rounded-[var(--radius-base)] transition-colors"
+        isDisabled={isDisabled || runner.winOdds === 0}
         onPress={() => handleClickToOpenDrawer()}
       >
         {runner.winOdds.toFixed(2)}

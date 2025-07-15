@@ -16,9 +16,11 @@ export type Meeting = {
   races: Race[];
 };
 
+export type RaceStatus = "OPEN" | "INRUNNING" | "RESULTED";
+
 export type Race = {
   id: string;
-  status: "Open" | "Pending" | "Settled";
+  status: RaceStatus;
   raceNumber: number;
   time: string; // e.g., "12:00 PM"
   distance: number;
@@ -36,7 +38,8 @@ export type Runner = {
   Number: number;
   weight: number;
   winOdds: number;
-  finalPosition: number; // -1 indicates not finished or undefined position
+  finalPosition: number;
+  scratched: boolean;
 };
 
 export type Pool = {
