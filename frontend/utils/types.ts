@@ -53,3 +53,20 @@ export type Breakdown = {
   impliedOdds: number;
   liquidity: number;
 };
+
+export type Bet = {
+  id: number;
+  eventId: number;
+  selectionId: number;
+  status: number; // Possible values: • 0 = Pending • 1 = Accepted • 2 = Rejected • 3 = Cancelled • 4 = Settled • 5 = Void • 6 = Suspended • 7 = InPlay • 8 = Inactive
+  placedAtUtc: string;
+  lastModifiedAtUtc: string;
+  strikeTxnId: string;
+  settlementTxnId: string;
+  walletAddress: string;
+  eventDetails: string;
+  selectionDetails: string;
+  stake: number;
+  odds: number;
+  betType: number; // Possible values: • 0 = FixedOdds • 1 = PoolBetting
+};

@@ -21,7 +21,7 @@ import TokenBalance from "./TokenBalance";
 const Header = () => {
   return (
     <div className="flex items-center justify-between py-4">
-      <Link href="/">
+      <Link href="/meetings">
         <div className="flex items-center">
           <Image
             src={LogoIcon}
