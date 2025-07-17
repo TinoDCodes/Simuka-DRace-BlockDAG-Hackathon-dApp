@@ -12,7 +12,7 @@ contract TestRaceCoin is ERC20, Ownable, ERC20Permit {
         Ownable(initialOwner)
         ERC20Permit("TestRaceCoin")
     {
-        _mint(initialOwner, 1000 * 10 ** decimals());
+        _mint(initialOwner, 1000000 * 10 ** decimals());
     }
 
     function mint(address to, uint256 amount) public onlyOwner {
