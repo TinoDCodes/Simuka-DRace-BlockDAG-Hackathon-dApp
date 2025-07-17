@@ -26,40 +26,33 @@ import type {
 export interface RaceChainBettingInterface extends Interface {
   getFunction(
     nameOrSignature:
-      | "clearFixedSelectionPosition"
-      | "fixedBets"
-      | "fixedSelectionPositions"
+      | "bets"
+      | "clearSelectionOutcome"
       | "owner"
-      | "placeFixedBet"
+      | "placeBet"
       | "renounceOwnership"
-      | "setFixedSelectionOutcome"
-      | "settleFixedBet"
+      | "selectionOutcomes"
+      | "setSelectionOutcome"
+      | "settleBet"
       | "transferOwnership"
   ): FunctionFragment;
 
   getEvent(
     nameOrSignatureOrTopic:
-      | "FixedBetPlaced"
-      | "FixedBetSettled"
-      | "FixedSelectionOutcomeUpdated"
+      | "BetPlaced"
+      | "BetSettled"
       | "OwnershipTransferred"
+      | "SelectionOutcomeUpdated"
   ): EventFragment;
 
+  encodeFunctionData(functionFragment: "bets", values: [BigNumberish]): string;
   encodeFunctionData(
-    functionFragment: "clearFixedSelectionPosition",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "fixedBets",
-    values: [BigNumberish]
-  ): string;
-  encodeFunctionData(
-    functionFragment: "fixedSelectionPositions",
+    functionFragment: "clearSelectionOutcome",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(functionFragment: "owner", values?: undefined): string;
   encodeFunctionData(
-    functionFragment: "placeFixedBet",
+    functionFragment: "placeBet",
     values: [BigNumberish, BigNumberish, BigNumberish, BigNumberish]
   ): string;
   encodeFunctionData(
@@ -67,11 +60,15 @@ export interface RaceChainBettingInterface extends Interface {
     values?: undefined
   ): string;
   encodeFunctionData(
-    functionFragment: "setFixedSelectionOutcome",
-    values: [BigNumberish, BigNumberish]
+    functionFragment: "selectionOutcomes",
+    values: [BigNumberish]
   ): string;
   encodeFunctionData(
-    functionFragment: "settleFixedBet",
+    functionFragment: "setSelectionOutcome",
+    values: [BigNumberish, BigNumberish, BigNumberish]
+  ): string;
+  encodeFunctionData(
+    functionFragment: "settleBet",
     values: [BigNumberish]
   ): string;
   encodeFunctionData(
@@ -79,39 +76,33 @@ export interface RaceChainBettingInterface extends Interface {
     values: [AddressLike]
   ): string;
 
+  decodeFunctionResult(functionFragment: "bets", data: BytesLike): Result;
   decodeFunctionResult(
-    functionFragment: "clearFixedSelectionPosition",
-    data: BytesLike
-  ): Result;
-  decodeFunctionResult(functionFragment: "fixedBets", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "fixedSelectionPositions",
+    functionFragment: "clearSelectionOutcome",
     data: BytesLike
   ): Result;
   decodeFunctionResult(functionFragment: "owner", data: BytesLike): Result;
-  decodeFunctionResult(
-    functionFragment: "placeFixedBet",
-    data: BytesLike
-  ): Result;
+  decodeFunctionResult(functionFragment: "placeBet", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "renounceOwnership",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "setFixedSelectionOutcome",
+    functionFragment: "selectionOutcomes",
     data: BytesLike
   ): Result;
   decodeFunctionResult(
-    functionFragment: "settleFixedBet",
+    functionFragment: "setSelectionOutcome",
     data: BytesLike
   ): Result;
+  decodeFunctionResult(functionFragment: "settleBet", data: BytesLike): Result;
   decodeFunctionResult(
     functionFragment: "transferOwnership",
     data: BytesLike
   ): Result;
 }
 
-export namespace FixedBetPlacedEvent {
+export namespace BetPlacedEvent {
   export type InputTuple = [
     user: AddressLike,
     betId: BigNumberish,
@@ -139,7 +130,7 @@ export namespace FixedBetPlacedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace FixedBetSettledEvent {
+export namespace BetSettledEvent {
   export type InputTuple = [
     betId: BigNumberish,
     user: AddressLike,
@@ -157,12 +148,12 @@ export namespace FixedBetSettledEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace FixedSelectionOutcomeUpdatedEvent {
-  export type InputTuple = [selectionId: BigNumberish, position: BigNumberish];
-  export type OutputTuple = [selectionId: bigint, position: bigint];
+export namespace OwnershipTransferredEvent {
+  export type InputTuple = [previousOwner: AddressLike, newOwner: AddressLike];
+  export type OutputTuple = [previousOwner: string, newOwner: string];
   export interface OutputObject {
-    selectionId: bigint;
-    position: bigint;
+    previousOwner: string;
+    newOwner: string;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -170,12 +161,21 @@ export namespace FixedSelectionOutcomeUpdatedEvent {
   export type LogDescription = TypedLogDescription<Event>;
 }
 
-export namespace OwnershipTransferredEvent {
-  export type InputTuple = [previousOwner: AddressLike, newOwner: AddressLike];
-  export type OutputTuple = [previousOwner: string, newOwner: string];
+export namespace SelectionOutcomeUpdatedEvent {
+  export type InputTuple = [
+    selectionId: BigNumberish,
+    position: BigNumberish,
+    impliedOdds: BigNumberish
+  ];
+  export type OutputTuple = [
+    selectionId: bigint,
+    position: bigint,
+    impliedOdds: bigint
+  ];
   export interface OutputObject {
-    previousOwner: string;
-    newOwner: string;
+    selectionId: bigint;
+    position: bigint;
+    impliedOdds: bigint;
   }
   export type Event = TypedContractEvent<InputTuple, OutputTuple, OutputObject>;
   export type Filter = TypedDeferredTopicFilter<Event>;
@@ -226,13 +226,7 @@ export interface RaceChainBetting extends BaseContract {
     event?: TCEvent
   ): Promise<this>;
 
-  clearFixedSelectionPosition: TypedContractMethod<
-    [selectionId: BigNumberish],
-    [void],
-    "nonpayable"
-  >;
-
-  fixedBets: TypedContractMethod<
+  bets: TypedContractMethod<
     [arg0: BigNumberish],
     [
       [bigint, bigint, bigint, string] & {
@@ -245,15 +239,15 @@ export interface RaceChainBetting extends BaseContract {
     "view"
   >;
 
-  fixedSelectionPositions: TypedContractMethod<
-    [arg0: BigNumberish],
-    [bigint],
-    "view"
+  clearSelectionOutcome: TypedContractMethod<
+    [selectionId: BigNumberish],
+    [void],
+    "nonpayable"
   >;
 
   owner: TypedContractMethod<[], [string], "view">;
 
-  placeFixedBet: TypedContractMethod<
+  placeBet: TypedContractMethod<
     [
       betId: BigNumberish,
       stake: BigNumberish,
@@ -266,13 +260,23 @@ export interface RaceChainBetting extends BaseContract {
 
   renounceOwnership: TypedContractMethod<[], [void], "nonpayable">;
 
-  setFixedSelectionOutcome: TypedContractMethod<
-    [selectionId: BigNumberish, position: BigNumberish],
+  selectionOutcomes: TypedContractMethod<
+    [arg0: BigNumberish],
+    [[bigint, bigint] & { position: bigint; impliedOdds: bigint }],
+    "view"
+  >;
+
+  setSelectionOutcome: TypedContractMethod<
+    [
+      selectionId: BigNumberish,
+      position: BigNumberish,
+      impliedOdds: BigNumberish
+    ],
     [void],
     "nonpayable"
   >;
 
-  settleFixedBet: TypedContractMethod<
+  settleBet: TypedContractMethod<
     [betId: BigNumberish],
     [boolean],
     "nonpayable"
@@ -289,10 +293,7 @@ export interface RaceChainBetting extends BaseContract {
   ): T;
 
   getFunction(
-    nameOrSignature: "clearFixedSelectionPosition"
-  ): TypedContractMethod<[selectionId: BigNumberish], [void], "nonpayable">;
-  getFunction(
-    nameOrSignature: "fixedBets"
+    nameOrSignature: "bets"
   ): TypedContractMethod<
     [arg0: BigNumberish],
     [
@@ -306,13 +307,13 @@ export interface RaceChainBetting extends BaseContract {
     "view"
   >;
   getFunction(
-    nameOrSignature: "fixedSelectionPositions"
-  ): TypedContractMethod<[arg0: BigNumberish], [bigint], "view">;
+    nameOrSignature: "clearSelectionOutcome"
+  ): TypedContractMethod<[selectionId: BigNumberish], [void], "nonpayable">;
   getFunction(
     nameOrSignature: "owner"
   ): TypedContractMethod<[], [string], "view">;
   getFunction(
-    nameOrSignature: "placeFixedBet"
+    nameOrSignature: "placeBet"
   ): TypedContractMethod<
     [
       betId: BigNumberish,
@@ -327,39 +328,43 @@ export interface RaceChainBetting extends BaseContract {
     nameOrSignature: "renounceOwnership"
   ): TypedContractMethod<[], [void], "nonpayable">;
   getFunction(
-    nameOrSignature: "setFixedSelectionOutcome"
+    nameOrSignature: "selectionOutcomes"
   ): TypedContractMethod<
-    [selectionId: BigNumberish, position: BigNumberish],
+    [arg0: BigNumberish],
+    [[bigint, bigint] & { position: bigint; impliedOdds: bigint }],
+    "view"
+  >;
+  getFunction(
+    nameOrSignature: "setSelectionOutcome"
+  ): TypedContractMethod<
+    [
+      selectionId: BigNumberish,
+      position: BigNumberish,
+      impliedOdds: BigNumberish
+    ],
     [void],
     "nonpayable"
   >;
   getFunction(
-    nameOrSignature: "settleFixedBet"
+    nameOrSignature: "settleBet"
   ): TypedContractMethod<[betId: BigNumberish], [boolean], "nonpayable">;
   getFunction(
     nameOrSignature: "transferOwnership"
   ): TypedContractMethod<[newOwner: AddressLike], [void], "nonpayable">;
 
   getEvent(
-    key: "FixedBetPlaced"
+    key: "BetPlaced"
   ): TypedContractEvent<
-    FixedBetPlacedEvent.InputTuple,
-    FixedBetPlacedEvent.OutputTuple,
-    FixedBetPlacedEvent.OutputObject
+    BetPlacedEvent.InputTuple,
+    BetPlacedEvent.OutputTuple,
+    BetPlacedEvent.OutputObject
   >;
   getEvent(
-    key: "FixedBetSettled"
+    key: "BetSettled"
   ): TypedContractEvent<
-    FixedBetSettledEvent.InputTuple,
-    FixedBetSettledEvent.OutputTuple,
-    FixedBetSettledEvent.OutputObject
-  >;
-  getEvent(
-    key: "FixedSelectionOutcomeUpdated"
-  ): TypedContractEvent<
-    FixedSelectionOutcomeUpdatedEvent.InputTuple,
-    FixedSelectionOutcomeUpdatedEvent.OutputTuple,
-    FixedSelectionOutcomeUpdatedEvent.OutputObject
+    BetSettledEvent.InputTuple,
+    BetSettledEvent.OutputTuple,
+    BetSettledEvent.OutputObject
   >;
   getEvent(
     key: "OwnershipTransferred"
@@ -368,39 +373,35 @@ export interface RaceChainBetting extends BaseContract {
     OwnershipTransferredEvent.OutputTuple,
     OwnershipTransferredEvent.OutputObject
   >;
+  getEvent(
+    key: "SelectionOutcomeUpdated"
+  ): TypedContractEvent<
+    SelectionOutcomeUpdatedEvent.InputTuple,
+    SelectionOutcomeUpdatedEvent.OutputTuple,
+    SelectionOutcomeUpdatedEvent.OutputObject
+  >;
 
   filters: {
-    "FixedBetPlaced(address,uint32,uint256,uint16,uint32)": TypedContractEvent<
-      FixedBetPlacedEvent.InputTuple,
-      FixedBetPlacedEvent.OutputTuple,
-      FixedBetPlacedEvent.OutputObject
+    "BetPlaced(address,uint32,uint256,uint16,uint32)": TypedContractEvent<
+      BetPlacedEvent.InputTuple,
+      BetPlacedEvent.OutputTuple,
+      BetPlacedEvent.OutputObject
     >;
-    FixedBetPlaced: TypedContractEvent<
-      FixedBetPlacedEvent.InputTuple,
-      FixedBetPlacedEvent.OutputTuple,
-      FixedBetPlacedEvent.OutputObject
-    >;
-
-    "FixedBetSettled(uint32,address,string)": TypedContractEvent<
-      FixedBetSettledEvent.InputTuple,
-      FixedBetSettledEvent.OutputTuple,
-      FixedBetSettledEvent.OutputObject
-    >;
-    FixedBetSettled: TypedContractEvent<
-      FixedBetSettledEvent.InputTuple,
-      FixedBetSettledEvent.OutputTuple,
-      FixedBetSettledEvent.OutputObject
+    BetPlaced: TypedContractEvent<
+      BetPlacedEvent.InputTuple,
+      BetPlacedEvent.OutputTuple,
+      BetPlacedEvent.OutputObject
     >;
 
-    "FixedSelectionOutcomeUpdated(uint32,uint8)": TypedContractEvent<
-      FixedSelectionOutcomeUpdatedEvent.InputTuple,
-      FixedSelectionOutcomeUpdatedEvent.OutputTuple,
-      FixedSelectionOutcomeUpdatedEvent.OutputObject
+    "BetSettled(uint32,address,string)": TypedContractEvent<
+      BetSettledEvent.InputTuple,
+      BetSettledEvent.OutputTuple,
+      BetSettledEvent.OutputObject
     >;
-    FixedSelectionOutcomeUpdated: TypedContractEvent<
-      FixedSelectionOutcomeUpdatedEvent.InputTuple,
-      FixedSelectionOutcomeUpdatedEvent.OutputTuple,
-      FixedSelectionOutcomeUpdatedEvent.OutputObject
+    BetSettled: TypedContractEvent<
+      BetSettledEvent.InputTuple,
+      BetSettledEvent.OutputTuple,
+      BetSettledEvent.OutputObject
     >;
 
     "OwnershipTransferred(address,address)": TypedContractEvent<
@@ -412,6 +413,17 @@ export interface RaceChainBetting extends BaseContract {
       OwnershipTransferredEvent.InputTuple,
       OwnershipTransferredEvent.OutputTuple,
       OwnershipTransferredEvent.OutputObject
+    >;
+
+    "SelectionOutcomeUpdated(uint32,uint8,uint16)": TypedContractEvent<
+      SelectionOutcomeUpdatedEvent.InputTuple,
+      SelectionOutcomeUpdatedEvent.OutputTuple,
+      SelectionOutcomeUpdatedEvent.OutputObject
+    >;
+    SelectionOutcomeUpdated: TypedContractEvent<
+      SelectionOutcomeUpdatedEvent.InputTuple,
+      SelectionOutcomeUpdatedEvent.OutputTuple,
+      SelectionOutcomeUpdatedEvent.OutputObject
     >;
   };
 }

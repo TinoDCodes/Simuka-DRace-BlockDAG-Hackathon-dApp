@@ -15,6 +15,7 @@ import { useAccount } from "wagmi";
 
 type PlaceFixedBetDrawerProps = {
   isDisabled: boolean;
+  raceId: number;
   runner: Runner;
   isRaceResulted: boolean;
 };
@@ -23,6 +24,7 @@ const PlaceFixedBetDrawer = ({
   runner,
   isDisabled,
   isRaceResulted,
+  raceId,
 }: PlaceFixedBetDrawerProps) => {
   const { isConnected } = useAccount();
   const { isOpen, onOpen, onOpenChange, onClose } = useDisclosure();
@@ -77,8 +79,13 @@ const PlaceFixedBetDrawer = ({
   };
 
   const handlePlaceBet = async () => {
-    // TODO: add betId
-    await placeFixedBet(3, betAmount, runner.winOdds, 2);
+    await placeFixedBet({
+      raceId,
+      stake: betAmount,
+      odds: runner.winOdds,
+      selectionId: parseInt(runner.id),
+      selectionDetails: `${runner.Number}. ${runner.name}`,
+    });
     setInputValue("0.00");
     setBetAmount(0);
     onClose();

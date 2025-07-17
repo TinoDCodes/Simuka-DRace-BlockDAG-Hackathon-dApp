@@ -1,17 +1,36 @@
 import { RaceChainBetting__factory } from "typechain/factories/contracts/RaceChainBetting__factory";
-import { useWriteContract, useWaitForTransactionReceipt } from "wagmi";
+import {
+  useWriteContract,
+  useWaitForTransactionReceipt,
+  useAccount,
+} from "wagmi";
 import { ethers } from "ethers";
 import { addToast } from "@heroui/react";
 import { TokenContractABI } from "@/utils/abis";
 import { useEffect, useState } from "react";
+import {
+  InitiateFixedBetRequest,
+  StrikeBetRequest,
+} from "@/utils/request-types";
 
-const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_SEPOLIA_CONTRACT_ADDRESS!;
-const TOKEN_ADDRESS = process.env.NEXT_PUBLIC_TEST_RACE_COIN_ADDRESS!;
+type BetDetails = {
+  raceId: number;
+  stake: number;
+  odds: number;
+  selectionId: number;
+  selectionDetails: string;
+};
+
+const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_PRIMORDIAL_CONTRACT_ADDRESS!;
+const TOKEN_ADDRESS =
+  process.env.NEXT_PUBLIC_PRIMORDIAL_TEST_RACE_COIN_ADDRESS!;
 
 export const usePlaceFixedBet = () => {
+  const { address } = useAccount();
   const { writeContractAsync } = useWriteContract();
   const [isLoading, setIsLoading] = useState(false);
   const [txHash, setTxHash] = useState<`0x${string}`>();
+  const [betId, setBetId] = useState<number>();
 
   const { status } = useWaitForTransactionReceipt({
     hash: txHash,
@@ -25,30 +44,57 @@ export const usePlaceFixedBet = () => {
   });
 
   useEffect(() => {
-    if (status === "success") {
-      addToast({
-        title: "Bet placed successfully!",
-        description: "Your bet has been placed successfully.",
-        color: "success",
-        icon: "🎉",
-      });
-    }
+    const strikeBet = async (success: boolean) => {
+      const reqBody: StrikeBetRequest = {
+        betId: betId!,
+        txnId: txHash!,
+        succeeded: success,
+      };
 
-    if (status === "error") {
-      addToast({
-        title: "Error placing bet!",
-        description: "Unable to place bet. Transaction reverted.",
-        color: "danger",
-      });
-    }
-  }, [status]);
+      try {
+        await fetch("/api/bets", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify(reqBody),
+        });
+      } catch (error) {
+        console.error("Failed to report bet result:", error);
+      }
+    };
 
-  const placeFixedBet = async (
-    betId: number,
-    stake: number,
-    odds: number,
-    selectionId: number
-  ) => {
+    const handleStatusChange = async () => {
+      if (status === "success") {
+        addToast({
+          title: "Bet placed successfully!",
+          description: "Your bet has been placed successfully.",
+          color: "success",
+          icon: "🎉",
+        });
+        await strikeBet(true);
+      }
+
+      if (status === "error") {
+        addToast({
+          title: "Error placing bet!",
+          description: "Unable to place bet. Transaction reverted.",
+          color: "danger",
+        });
+        await strikeBet(false);
+      }
+    };
+
+    handleStatusChange();
+  }, [status, betId, txHash]);
+
+  const placeFixedBet = async ({
+    raceId,
+    stake,
+    odds,
+    selectionId,
+    selectionDetails,
+  }: BetDetails) => {
     setIsLoading(true);
 
     // 1) scale
@@ -56,7 +102,36 @@ export const usePlaceFixedBet = () => {
     const scaledOdds = Math.round(odds * 100);
 
     try {
-      // 2) approve
+      const reqBody: InitiateFixedBetRequest = {
+        walletAddress: address,
+        eventId: raceId,
+        selectionId: selectionId,
+        eventDetails: `race ${raceId}`,
+        selectionDetails: selectionDetails,
+        stake: stake,
+        odds: odds,
+        betType: 0,
+      };
+
+      // 2) get unique bet id
+      const res = await fetch("/api/bets", {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(reqBody),
+      });
+
+      if (!res.ok) {
+        throw new Error("Failed to place bet");
+      }
+
+      const bet = await res.json();
+      const betId = bet.id;
+
+      setBetId(betId);
+
+      // 3) approve
       await writeContractAsync(
         {
           address: `0x${TOKEN_ADDRESS}`,
@@ -72,12 +147,12 @@ export const usePlaceFixedBet = () => {
         }
       );
 
-      // 3) place bet
+      // 4) place bet
       await writeContractAsync(
         {
           address: `0x${CONTRACT_ADDRESS}`,
           abi: RaceChainBetting__factory.abi,
-          functionName: "placeFixedBet",
+          functionName: "placeBet",
           args: [betId, stakeBN, scaledOdds, selectionId],
         },
         {

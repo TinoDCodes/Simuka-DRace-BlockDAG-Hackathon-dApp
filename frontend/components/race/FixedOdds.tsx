@@ -15,11 +15,12 @@ import { InfoIcon } from "lucide-react";
 import PlaceFixedBetDrawer from "./PlaceFixedBetDrawer";
 
 type FixedOddsProps = {
+  raceId: number;
   raceStatus: RaceStatus;
   runners: Runner[];
 };
 
-const FixedOdds = ({ runners, raceStatus }: FixedOddsProps) => {
+const FixedOdds = ({ runners, raceStatus, raceId }: FixedOddsProps) => {
   return (
     <Table
       aria-label="Fixed Odds Table"
@@ -101,6 +102,7 @@ const FixedOdds = ({ runners, raceStatus }: FixedOddsProps) => {
             {/* Win Odds */}
             <TableCell className="text-center">
               <PlaceFixedBetDrawer
+                raceId={raceId}
                 isDisabled={runner.scratched}
                 isRaceResulted={raceStatus === "RESULTED"}
                 runner={runner}
