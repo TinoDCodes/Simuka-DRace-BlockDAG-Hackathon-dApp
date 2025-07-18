@@ -44,7 +44,8 @@ export type Runner = {
 
 export type Pool = {
   totalLiquidity: number;
-  LifeTime: number;
+  lifeTime: number;
+  utilization: number;
   breakdowns: Breakdown[]; // Possibly a typo — should be "breakdowns"?
 };
 
@@ -52,6 +53,9 @@ export type Breakdown = {
   id: string;
   impliedOdds: number;
   liquidity: number;
+  name: string;
+  number: number;
+  scratched: boolean;
 };
 
 export type Bet = {

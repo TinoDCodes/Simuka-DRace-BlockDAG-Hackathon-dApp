@@ -56,7 +56,7 @@ const TokenBalance = () => {
         </motion.span>
       </AnimatePresence>
 
-      <span className="hidden md:block text-sm text-gray-400">RACE</span>
+      <span className="hidden md:block text-sm text-gray-400">$RACE</span>
     </button>
   );
 };

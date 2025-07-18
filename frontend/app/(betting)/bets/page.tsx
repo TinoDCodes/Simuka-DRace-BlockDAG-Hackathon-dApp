@@ -212,7 +212,7 @@ export default function BetsPage() {
                   </TableCell>
                   <TableCell>
                     <div className="font-mono text-white">
-                      {bet.stake.toFixed(2)} RACE
+                      {getStakeDisplayValue(bet.stake)} $RACE
                     </div>
                   </TableCell>
                   <TableCell>
@@ -268,7 +268,10 @@ export default function BetsPage() {
           <div className="bg-[rgba(15,15,25,0.65)] backdrop-blur-lg border border-[var(--color-border)] rounded-[var(--radius-base)] p-4">
             <div className="text-gray-400">Total Stake</div>
             <div className="text-2xl font-bold text-white">
-              {bets?.reduce((sum, bet) => sum + bet.stake, 0).toFixed(2)} RACE
+              {getStakeDisplayValue(
+                bets!.reduce((sum, bet) => sum + bet.stake, 0)
+              )}{" "}
+              $RACE
             </div>
           </div>
 
@@ -286,3 +289,7 @@ export default function BetsPage() {
     </div>
   );
 }
+
+const getStakeDisplayValue = (stake: number) => {
+  return (stake / 100).toFixed(2);
+};

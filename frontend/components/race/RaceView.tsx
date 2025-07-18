@@ -94,8 +94,12 @@ const RaceView = ({ meetingId, raceId }: RaceViewProps) => {
             raceId={parseInt(raceData.id)}
           />
         </Tab>
-        <Tab key="tote" title="TOTE Pool" className="grow flex flex-col">
-          <TotePool pool={raceData.pool} />
+        <Tab key="tote" title="Liquidity Pool" className="grow flex flex-col">
+          <TotePool
+            pool={raceData.pool}
+            raceId={parseInt(raceData.id)}
+            raceStatus={raceData.status}
+          />
         </Tab>
       </Tabs>
     </div>

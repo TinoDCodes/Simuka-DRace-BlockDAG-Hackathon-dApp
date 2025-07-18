@@ -18,7 +18,8 @@ export const useTokenAccount = () => {
     args: [address],
     query: {
       enabled: !!address,
-      refetchInterval: 30 * 1000,
+      refetchInterval: 60 * 1000,
+      staleTime: 55 * 1000,
       refetchIntervalInBackground: true,
     },
   });
