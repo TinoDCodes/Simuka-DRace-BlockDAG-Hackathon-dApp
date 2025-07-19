@@ -112,10 +112,10 @@ const TotePool = ({ pool, raceId, raceStatus }: TotePoolProps) => {
   const maxLiquidity = Math.max(...pool.breakdowns.map((b) => b.liquidity));
 
   const handleClick = (index: number) => {
-    if (raceStatus === "RESULTED") {
+    if (raceStatus !== "OPEN") {
       addToast({
-        title: "Race Completed!",
-        description: "Bets are no longer available for this race",
+        title: "Betting Unavailable",
+        description: "Betting is no longer available for this race",
         size: "md",
       });
     } else {

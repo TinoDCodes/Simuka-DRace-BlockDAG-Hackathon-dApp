@@ -15,8 +15,9 @@ import {
   Tabs,
   Tab,
   Spinner,
+  Tooltip,
 } from "@heroui/react";
-import { RefreshCw, Info, Calendar, Coins } from "lucide-react";
+import { RefreshCw, Info, Calendar, Coins, Link } from "lucide-react";
 import { motion } from "framer-motion";
 import { useState } from "react";
 import moment from "moment";
@@ -38,11 +39,11 @@ const statusConfig: Record<number, { label: string; color: string }> = {
 const betTypeConfig: Record<number, { label: string; icon: React.ReactNode }> =
   {
     0: { label: "Fixed Odds", icon: <Coins size={14} /> },
-    1: { label: "Tote Pool", icon: <Coins size={14} /> },
+    1: { label: "Liquidity Pool", icon: <Coins size={14} /> },
   };
 
 export default function BetsPage() {
-  const { isConnected, address } = useAccount();
+  const { isConnected, address, chain } = useAccount();
   const { bets, isLoading, isError, error, refetch } = useWalletBets();
   const [activeTab, setActiveTab] = useState("all");
 
@@ -237,13 +238,37 @@ export default function BetsPage() {
                     </div>
                   </TableCell>
                   <TableCell>
-                    <Chip
-                      size="sm"
-                      variant="flat"
-                      className={`bg-${statusConfig[bet.status].color}`}
+                    <Tooltip
+                      content="Click to view on block explorer"
+                      showArrow
                     >
-                      {statusConfig[bet.status].label}
-                    </Chip>
+                      <Button
+                        size="sm"
+                        variant="flat"
+                        radius="full"
+                        endContent={
+                          bet.strikeTxnId || bet.settlementTxnId ? (
+                            <Link className="w-3 h-3" />
+                          ) : null
+                        }
+                        className={`bg-${
+                          statusConfig[bet.status].color
+                        } disabled:opacity-75 disabled:text-white w-[85%]`}
+                        isDisabled={!bet.strikeTxnId && !bet.settlementTxnId}
+                        onPress={() => {
+                          const txId = bet.settlementTxnId || bet.strikeTxnId;
+
+                          if (txId && chain?.blockExplorers?.default.url) {
+                            window.open(
+                              `${chain.blockExplorers.default.url}/tx/${txId}`,
+                              "_blank"
+                            );
+                          }
+                        }}
+                      >
+                        {statusConfig[bet.status].label}
+                      </Button>
+                    </Tooltip>
                   </TableCell>
                 </TableRow>
               ))}

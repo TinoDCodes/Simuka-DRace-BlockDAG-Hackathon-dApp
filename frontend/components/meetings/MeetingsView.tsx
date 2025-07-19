@@ -112,7 +112,7 @@ const MeetingsView = ({ date, page }: MeetingsViewProps) => {
                   className={`
                   flex flex-col h-fit items-center px-3 py-2 rounded-lg text-sm font-semibold cursor-pointer transition-all
                   ${
-                    race.status === "RESULTED"
+                    race.status !== "OPEN" && race.status !== "INRUNNING"
                       ? "bg-[#3a3a50]/40 text-white/70 hover:scale-105"
                       : "bg-[#2b2b35]  hover:bg-[#3a3a50]"
                   }`}

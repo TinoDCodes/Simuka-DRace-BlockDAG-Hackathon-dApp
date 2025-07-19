@@ -1,8 +1,7 @@
 import { TokenContractABI } from "@/utils/abis";
 import { useAccount, useReadContract } from "wagmi";
 
-const TOKEN_ADDRESS =
-  process.env.NEXT_PUBLIC_PRIMORDIAL_TEST_RACE_COIN_ADDRESS!;
+const TOKEN_ADDRESS = process.env.NEXT_PUBLIC_SEPOLIA_TEST_RACE_COIN_ADDRESS!;
 
 export const useTokenAccount = () => {
   const { address } = useAccount();

@@ -6,170 +6,19 @@ export const TokenContractABI = [
         name: "initialOwner",
         type: "address",
       },
+      {
+        internalType: "address",
+        name: "_tokenAddress",
+        type: "address",
+      },
+      {
+        internalType: "uint8",
+        name: "tokenDecimals",
+        type: "uint8",
+      },
     ],
     stateMutability: "nonpayable",
     type: "constructor",
-  },
-  {
-    inputs: [],
-    name: "ECDSAInvalidSignature",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "length",
-        type: "uint256",
-      },
-    ],
-    name: "ECDSAInvalidSignatureLength",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "bytes32",
-        name: "s",
-        type: "bytes32",
-      },
-    ],
-    name: "ECDSAInvalidSignatureS",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "spender",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "allowance",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "needed",
-        type: "uint256",
-      },
-    ],
-    name: "ERC20InsufficientAllowance",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "sender",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "balance",
-        type: "uint256",
-      },
-      {
-        internalType: "uint256",
-        name: "needed",
-        type: "uint256",
-      },
-    ],
-    name: "ERC20InsufficientBalance",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "approver",
-        type: "address",
-      },
-    ],
-    name: "ERC20InvalidApprover",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "receiver",
-        type: "address",
-      },
-    ],
-    name: "ERC20InvalidReceiver",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "sender",
-        type: "address",
-      },
-    ],
-    name: "ERC20InvalidSender",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "spender",
-        type: "address",
-      },
-    ],
-    name: "ERC20InvalidSpender",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "uint256",
-        name: "deadline",
-        type: "uint256",
-      },
-    ],
-    name: "ERC2612ExpiredSignature",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "signer",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-    ],
-    name: "ERC2612InvalidSigner",
-    type: "error",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "currentNonce",
-        type: "uint256",
-      },
-    ],
-    name: "InvalidAccountNonce",
-    type: "error",
-  },
-  {
-    inputs: [],
-    name: "InvalidShortString",
-    type: "error",
   },
   {
     inputs: [
@@ -194,14 +43,19 @@ export const TokenContractABI = [
     type: "error",
   },
   {
+    inputs: [],
+    name: "ReentrancyGuardReentrantCall",
+    type: "error",
+  },
+  {
     inputs: [
       {
-        internalType: "string",
-        name: "str",
-        type: "string",
+        internalType: "address",
+        name: "token",
+        type: "address",
       },
     ],
-    name: "StringTooLong",
+    name: "SafeERC20FailedOperation",
     type: "error",
   },
   {
@@ -210,29 +64,60 @@ export const TokenContractABI = [
       {
         indexed: true,
         internalType: "address",
-        name: "owner",
+        name: "user",
         type: "address",
       },
       {
         indexed: true,
-        internalType: "address",
-        name: "spender",
-        type: "address",
+        internalType: "uint32",
+        name: "betId",
+        type: "uint32",
       },
       {
         indexed: false,
         internalType: "uint256",
-        name: "value",
+        name: "stake",
         type: "uint256",
       },
+      {
+        indexed: false,
+        internalType: "uint16",
+        name: "odds",
+        type: "uint16",
+      },
+      {
+        indexed: false,
+        internalType: "uint32",
+        name: "selectionId",
+        type: "uint32",
+      },
     ],
-    name: "Approval",
+    name: "BetPlaced",
     type: "event",
   },
   {
     anonymous: false,
-    inputs: [],
-    name: "EIP712DomainChanged",
+    inputs: [
+      {
+        indexed: true,
+        internalType: "uint32",
+        name: "betId",
+        type: "uint32",
+      },
+      {
+        indexed: true,
+        internalType: "address",
+        name: "user",
+        type: "address",
+      },
+      {
+        indexed: false,
+        internalType: "string",
+        name: "result",
+        type: "string",
+      },
+    ],
+    name: "BetSettled",
     type: "event",
   },
   {
@@ -259,34 +144,55 @@ export const TokenContractABI = [
     inputs: [
       {
         indexed: true,
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        indexed: true,
-        internalType: "address",
-        name: "to",
-        type: "address",
+        internalType: "uint32",
+        name: "selectionId",
+        type: "uint32",
       },
       {
         indexed: false,
-        internalType: "uint256",
-        name: "value",
-        type: "uint256",
+        internalType: "uint8",
+        name: "position",
+        type: "uint8",
+      },
+      {
+        indexed: false,
+        internalType: "uint16",
+        name: "impliedOdds",
+        type: "uint16",
       },
     ],
-    name: "Transfer",
+    name: "SelectionOutcomeUpdated",
     type: "event",
   },
   {
-    inputs: [],
-    name: "DOMAIN_SEPARATOR",
+    inputs: [
+      {
+        internalType: "uint32",
+        name: "",
+        type: "uint32",
+      },
+    ],
+    name: "bets",
     outputs: [
       {
-        internalType: "bytes32",
-        name: "",
-        type: "bytes32",
+        internalType: "uint256",
+        name: "stake",
+        type: "uint256",
+      },
+      {
+        internalType: "uint16",
+        name: "odds",
+        type: "uint16",
+      },
+      {
+        internalType: "uint32",
+        name: "selectionId",
+        type: "uint32",
+      },
+      {
+        internalType: "address",
+        name: "user",
+        type: "address",
       },
     ],
     stateMutability: "view",
@@ -295,174 +201,14 @@ export const TokenContractABI = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "spender",
-        type: "address",
+        internalType: "uint32",
+        name: "selectionId",
+        type: "uint32",
       },
     ],
-    name: "allowance",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "spender",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "value",
-        type: "uint256",
-      },
-    ],
-    name: "approve",
-    outputs: [
-      {
-        internalType: "bool",
-        name: "",
-        type: "bool",
-      },
-    ],
-    stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "account",
-        type: "address",
-      },
-    ],
-    name: "balanceOf",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "decimals",
-    outputs: [
-      {
-        internalType: "uint8",
-        name: "",
-        type: "uint8",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "eip712Domain",
-    outputs: [
-      {
-        internalType: "bytes1",
-        name: "fields",
-        type: "bytes1",
-      },
-      {
-        internalType: "string",
-        name: "name",
-        type: "string",
-      },
-      {
-        internalType: "string",
-        name: "version",
-        type: "string",
-      },
-      {
-        internalType: "uint256",
-        name: "chainId",
-        type: "uint256",
-      },
-      {
-        internalType: "address",
-        name: "verifyingContract",
-        type: "address",
-      },
-      {
-        internalType: "bytes32",
-        name: "salt",
-        type: "bytes32",
-      },
-      {
-        internalType: "uint256[]",
-        name: "extensions",
-        type: "uint256[]",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "amount",
-        type: "uint256",
-      },
-    ],
-    name: "mint",
+    name: "clearSelectionOutcome",
     outputs: [],
     stateMutability: "nonpayable",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "name",
-    outputs: [
-      {
-        internalType: "string",
-        name: "",
-        type: "string",
-      },
-    ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [
-      {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-    ],
-    name: "nonces",
-    outputs: [
-      {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
-      },
-    ],
-    stateMutability: "view",
     type: "function",
   },
   {
@@ -481,42 +227,27 @@ export const TokenContractABI = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "owner",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "spender",
-        type: "address",
+        internalType: "uint32",
+        name: "betId",
+        type: "uint32",
       },
       {
         internalType: "uint256",
-        name: "value",
+        name: "stake",
         type: "uint256",
       },
       {
-        internalType: "uint256",
-        name: "deadline",
-        type: "uint256",
+        internalType: "uint16",
+        name: "odds",
+        type: "uint16",
       },
       {
-        internalType: "uint8",
-        name: "v",
-        type: "uint8",
-      },
-      {
-        internalType: "bytes32",
-        name: "r",
-        type: "bytes32",
-      },
-      {
-        internalType: "bytes32",
-        name: "s",
-        type: "bytes32",
+        internalType: "uint32",
+        name: "selectionId",
+        type: "uint32",
       },
     ],
-    name: "permit",
+    name: "placeBet",
     outputs: [],
     stateMutability: "nonpayable",
     type: "function",
@@ -529,26 +260,24 @@ export const TokenContractABI = [
     type: "function",
   },
   {
-    inputs: [],
-    name: "symbol",
-    outputs: [
+    inputs: [
       {
-        internalType: "string",
+        internalType: "uint32",
         name: "",
-        type: "string",
+        type: "uint32",
       },
     ],
-    stateMutability: "view",
-    type: "function",
-  },
-  {
-    inputs: [],
-    name: "totalSupply",
+    name: "selectionOutcomes",
     outputs: [
       {
-        internalType: "uint256",
-        name: "",
-        type: "uint256",
+        internalType: "uint8",
+        name: "position",
+        type: "uint8",
+      },
+      {
+        internalType: "uint16",
+        name: "impliedOdds",
+        type: "uint16",
       },
     ],
     stateMutability: "view",
@@ -557,50 +286,39 @@ export const TokenContractABI = [
   {
     inputs: [
       {
-        internalType: "address",
-        name: "to",
-        type: "address",
+        internalType: "uint32",
+        name: "selectionId",
+        type: "uint32",
       },
       {
-        internalType: "uint256",
-        name: "value",
-        type: "uint256",
+        internalType: "uint8",
+        name: "position",
+        type: "uint8",
       },
-    ],
-    name: "transfer",
-    outputs: [
       {
-        internalType: "bool",
-        name: "",
-        type: "bool",
+        internalType: "uint16",
+        name: "impliedOdds",
+        type: "uint16",
       },
     ],
+    name: "setSelectionOutcome",
+    outputs: [],
     stateMutability: "nonpayable",
     type: "function",
   },
   {
     inputs: [
       {
-        internalType: "address",
-        name: "from",
-        type: "address",
-      },
-      {
-        internalType: "address",
-        name: "to",
-        type: "address",
-      },
-      {
-        internalType: "uint256",
-        name: "value",
-        type: "uint256",
+        internalType: "uint32",
+        name: "betId",
+        type: "uint32",
       },
     ],
-    name: "transferFrom",
+    name: "settleBet",
     outputs: [
       {
         internalType: "bool",
-        name: "",
+        name: "success",
         type: "bool",
       },
     ],

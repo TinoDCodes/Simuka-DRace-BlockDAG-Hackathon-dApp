@@ -85,7 +85,7 @@ contract RaceChainBetting is Ownable, ReentrancyGuard {
     function placeBet(uint32 betId, uint256 stake, uint16 odds, uint32 selectionId) external nonReentrant {
         require(bets[betId].user == address(0), "This bet has already been placed!");
         require(stake > 0, "Stake cannot be zero!");
-        require(odds > 100 && odds <= 50000, "Odds must be > 1.00x and <= 500.00x");
+        require(odds == 0 || (odds > 100 && odds <= 50000), "Odds must be implied type OR fixed type (1.00-500.00)");
 
         bets[betId] = Bet({
             stake: stake,

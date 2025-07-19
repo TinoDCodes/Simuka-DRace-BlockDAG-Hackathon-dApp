@@ -45,8 +45,8 @@ const PlaceFixedBetDrawer = ({
       });
     } else if (isRaceResulted) {
       addToast({
-        title: "Race Completed!",
-        description: "Bets are no longer available for this race",
+        title: "Betting Unavailable",
+        description: "Betting is no longer available for this race",
         size: "md",
       });
     } else {

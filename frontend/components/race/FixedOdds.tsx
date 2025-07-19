@@ -104,7 +104,7 @@ const FixedOdds = ({ runners, raceStatus, raceId }: FixedOddsProps) => {
               <PlaceFixedBetDrawer
                 raceId={raceId}
                 isDisabled={runner.scratched}
-                isRaceResulted={raceStatus === "RESULTED"}
+                isRaceResulted={raceStatus !== "OPEN"}
                 runner={runner}
               />
             </TableCell>

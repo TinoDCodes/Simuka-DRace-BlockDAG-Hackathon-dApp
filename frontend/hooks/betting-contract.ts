@@ -4,7 +4,7 @@ import {
   useWaitForTransactionReceipt,
   useAccount,
 } from "wagmi";
-import { ethers, parseUnits } from "ethers";
+import { ethers } from "ethers";
 import { addToast } from "@heroui/react";
 import { TokenContractABI } from "@/utils/abis";
 import { useEffect, useState } from "react";
@@ -21,9 +21,8 @@ type BetDetails = {
   selectionDetails: string;
 };
 
-const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_PRIMORDIAL_CONTRACT_ADDRESS!;
-const TOKEN_ADDRESS =
-  process.env.NEXT_PUBLIC_PRIMORDIAL_TEST_RACE_COIN_ADDRESS!;
+const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_SEPOLIA_CONTRACT_ADDRESS!;
+const TOKEN_ADDRESS = process.env.NEXT_PUBLIC_SEPOLIA_TEST_RACE_COIN_ADDRESS!;
 
 /* ------------- PLACE FIXED BET ------------- */
 export const usePlaceFixedBet = () => {
@@ -139,8 +138,6 @@ export const usePlaceFixedBet = () => {
           abi: TokenContractABI,
           functionName: "approve",
           args: [`0x${CONTRACT_ADDRESS}`, stakeBN],
-          gas: BigInt(100_000),
-          gasPrice: parseUnits("5", "gwei"),
         },
         {
           onError(error) {
@@ -157,8 +154,6 @@ export const usePlaceFixedBet = () => {
           abi: RaceChainBetting__factory.abi,
           functionName: "placeBet",
           args: [betId, stakeBN, scaledOdds, selectionId],
-          gas: BigInt(100_000),
-          gasPrice: parseUnits("5", "gwei"),
         },
         {
           onSuccess(transactionResponse) {
@@ -313,8 +308,6 @@ export const usePlacePoolBet = () => {
           abi: TokenContractABI,
           functionName: "approve",
           args: [`0x${CONTRACT_ADDRESS}`, stakeBN],
-          gas: BigInt(100_000),
-          gasPrice: parseUnits("5", "gwei"),
         },
         {
           onError(error) {
@@ -331,8 +324,6 @@ export const usePlacePoolBet = () => {
           abi: RaceChainBetting__factory.abi,
           functionName: "placeBet",
           args: [betId, stakeBN, 0, selectionId], // pass 0 for odds to signify AI‑implied odds
-          gas: BigInt(100_000),
-          gasPrice: parseUnits("5", "gwei"),
         },
         {
           onSuccess(transactionResponse) {
