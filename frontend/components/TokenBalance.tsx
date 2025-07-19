@@ -27,7 +27,7 @@ const TokenBalance = () => {
     return (
       <div className="flex items-center gap-2">
         <div className="w-3 h-3 rounded-full bg-[var(--color-primary)] animate-pulse" />
-        <span className="text-sm font-mono text-gray-400">--.-- RACE</span>
+        <span className="text-sm font-mono text-gray-400">--.-- $RACE</span>
       </div>
     );
   }
@@ -56,7 +56,7 @@ const TokenBalance = () => {
         </motion.span>
       </AnimatePresence>
 
-      <span className="hidden md:block text-sm text-gray-400">$RACE</span>
+      <span className="hidden md:block text-xs text-gray-400">$RACE</span>
     </button>
   );
 };

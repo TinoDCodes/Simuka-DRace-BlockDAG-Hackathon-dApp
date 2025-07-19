@@ -4,7 +4,7 @@ import {
   useWaitForTransactionReceipt,
   useAccount,
 } from "wagmi";
-import { ethers } from "ethers";
+import { ethers, parseUnits } from "ethers";
 import { addToast } from "@heroui/react";
 import { TokenContractABI } from "@/utils/abis";
 import { useEffect, useState } from "react";
@@ -139,6 +139,8 @@ export const usePlaceFixedBet = () => {
           abi: TokenContractABI,
           functionName: "approve",
           args: [`0x${CONTRACT_ADDRESS}`, stakeBN],
+          gas: BigInt(100_000),
+          gasPrice: parseUnits("5", "gwei"),
         },
         {
           onError(error) {
@@ -155,6 +157,8 @@ export const usePlaceFixedBet = () => {
           abi: RaceChainBetting__factory.abi,
           functionName: "placeBet",
           args: [betId, stakeBN, scaledOdds, selectionId],
+          gas: BigInt(100_000),
+          gasPrice: parseUnits("5", "gwei"),
         },
         {
           onSuccess(transactionResponse) {
@@ -301,6 +305,7 @@ export const usePlacePoolBet = () => {
 
       setBetId(betId);
 
+      console.log("stake bn", stakeBN);
       // 3) approve
       await writeContractAsync(
         {
@@ -308,6 +313,8 @@ export const usePlacePoolBet = () => {
           abi: TokenContractABI,
           functionName: "approve",
           args: [`0x${CONTRACT_ADDRESS}`, stakeBN],
+          gas: BigInt(100_000),
+          gasPrice: parseUnits("5", "gwei"),
         },
         {
           onError(error) {
@@ -324,6 +331,8 @@ export const usePlacePoolBet = () => {
           abi: RaceChainBetting__factory.abi,
           functionName: "placeBet",
           args: [betId, stakeBN, 0, selectionId], // pass 0 for odds to signify AI‑implied odds
+          gas: BigInt(100_000),
+          gasPrice: parseUnits("5", "gwei"),
         },
         {
           onSuccess(transactionResponse) {

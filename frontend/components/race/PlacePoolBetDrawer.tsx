@@ -58,7 +58,7 @@ const PlacePoolBetDrawer = ({
     });
     setInputValue("0.00");
     setBetAmount(0);
-    onClose();
+    setIsOpen(false);
   };
 
   return (

@@ -16,7 +16,13 @@ export type Meeting = {
   races: Race[];
 };
 
-export type RaceStatus = "OPEN" | "INRUNNING" | "RESULTED";
+export type RaceStatus =
+  | "OPEN"
+  | "INRUNNING"
+  | "RESULTED"
+  | "CANCELLED"
+  | "ABANDONED"
+  | "SETTLED";
 
 export type Race = {
   id: string;
