@@ -9,7 +9,6 @@ import {
   DrawerHeader,
   Input,
   Progress,
-  useDisclosure,
 } from "@heroui/react";
 import { Dispatch, SetStateAction, useState } from "react";
 import { useAccount } from "wagmi";
@@ -25,7 +24,6 @@ const PlacePoolBetDrawer = ({
   setIsOpen,
   selectedPool,
 }: PlacePoolBetDrawerProps) => {
-  const { onClose } = useDisclosure();
   const { address } = useAccount();
   const { placePoolBet, isLoading } = usePlacePoolBet();
 
