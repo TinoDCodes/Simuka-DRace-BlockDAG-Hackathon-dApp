@@ -44,7 +44,7 @@ const config: HardhatUserConfig = {
     simuka: {
       url: "http://4.194.208.98:18545", // simuka solutions PTY LTD primordial private node test via curl http://4.194.208.98:18545
       accounts: [PRIVATE_KEY || ""],
-      chainId: 1337, // use a custom ID if needed for private node
+      chainId: 1043, 
       gasPrice: 50_000_000_000,
       timeout: 200000,
     },
