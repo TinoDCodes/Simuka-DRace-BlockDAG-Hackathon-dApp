@@ -24,15 +24,17 @@ import moment from "moment";
 
 // Status chip configuration
 const statusConfig: Record<number, { label: string; color: string }> = {
-  0: { label: "Pending", color: "warning" },
-  1: { label: "Accepted", color: "success" },
-  2: { label: "Rejected", color: "danger" },
-  3: { label: "Cancelled", color: "default" },
-  4: { label: "Settled", color: "success" },
-  5: { label: "Void", color: "default" },
-  6: { label: "Suspended", color: "warning" },
-  7: { label: "In Play", color: "primary" },
-  8: { label: "Inactive", color: "default" },
+  0: { label: "Pending", color: "bg-[#F59E0B]" }, // Amber - waiting state
+  1: { label: "Accepted", color: "bg-[#3B82F6]" }, // Blue - positive action
+  2: { label: "Rejected", color: "bg-[#EF4444]" }, // Red - negative outcome
+  3: { label: "Cancelled", color: "bg-[#94A3B8]" }, // Gray - neutral/inactive
+  4: { label: "Settled", color: "bg-[#10B981]" }, // Emerald - completed
+  5: { label: "Void", color: "bg-[#8B5CF6]" }, // Violet - special case
+  6: { label: "Suspended", color: "bg-[#F97316]" }, // Orange - warning state
+  7: { label: "In Play", color: "bg-[#06B6D4]" }, // Cyan - active state
+  8: { label: "Inactive", color: "bg-[#64748B]" }, // Slate - muted state
+  9: { label: "Won", color: "bg-[#22C55E]" }, // Green - success
+  10: { label: "Lost", color: "bg-[#DC2626]" }, // Dark red - failure
 };
 
 // Bet type configuration
@@ -47,12 +49,16 @@ export default function BetsPage() {
   const { bets, isLoading, isError, error, refetch } = useWalletBets();
   const [activeTab, setActiveTab] = useState("all");
 
+  const isSettledStatus = (status: number) => {
+    return status === 4 || status === 9 || status === 10;
+  };
+
   // Filter bets based on active tab
   const filteredBets =
     bets?.filter((bet) => {
       if (activeTab === "all") return true;
       if (activeTab === "active") return bet.status === 7 || bet.status === 1;
-      if (activeTab === "settled") return bet.status === 4;
+      if (activeTab === "settled") return isSettledStatus(bet.status);
       return true;
     }) || [];
 
@@ -202,9 +208,11 @@ export default function BetsPage() {
               {filteredBets.map((bet) => (
                 <TableRow key={bet.id}>
                   <TableCell>
-                    <div className="font-medium text-white line-clamp-1">
-                      {bet.eventDetails}
-                    </div>
+                    <Tooltip content={bet.eventDetails}>
+                      <div className="font-medium text-white line-clamp-1 cursor-default">
+                        {bet.eventDetails}
+                      </div>
+                    </Tooltip>
                   </TableCell>
                   <TableCell>
                     <div className="font-medium text-white line-clamp-1">
@@ -213,7 +221,8 @@ export default function BetsPage() {
                   </TableCell>
                   <TableCell>
                     <div className="font-mono text-white">
-                      {getStakeDisplayValue(bet.stake)} $RACE
+                      {getStakeDisplayValue(bet.stake)}{" "}
+                      <span className="text-xs">$RACE</span>
                     </div>
                   </TableCell>
                   <TableCell>
@@ -251,9 +260,9 @@ export default function BetsPage() {
                             <Link className="w-3 h-3" />
                           ) : null
                         }
-                        className={`bg-${
+                        className={`${
                           statusConfig[bet.status].color
-                        } disabled:opacity-75 disabled:text-white w-[85%]`}
+                        } disabled:opacity-75 disabled:text-white w-[85%] font-medium`}
                         isDisabled={!bet.strikeTxnId && !bet.settlementTxnId}
                         onPress={() => {
                           const txId = bet.settlementTxnId || bet.strikeTxnId;
@@ -296,7 +305,7 @@ export default function BetsPage() {
               {getStakeDisplayValue(
                 bets!.reduce((sum, bet) => sum + bet.stake, 0)
               )}{" "}
-              $RACE
+              <span className="text-xl">$RACE</span>
             </div>
           </div>
 

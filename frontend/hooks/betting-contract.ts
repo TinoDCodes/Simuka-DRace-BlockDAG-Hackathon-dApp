@@ -5,7 +5,7 @@ import {
   useAccount,
 } from "wagmi";
 import { ethers } from "ethers";
-import { addToast } from "@heroui/react";
+import { addToast, closeAll } from "@heroui/react";
 import { TokenContractABI } from "@/utils/abis";
 import { useEffect, useState } from "react";
 import {
@@ -21,8 +21,8 @@ type BetDetails = {
   selectionDetails: string;
 };
 
-const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_SEPOLIA_CONTRACT_ADDRESS!;
-const TOKEN_ADDRESS = process.env.NEXT_PUBLIC_SEPOLIA_TEST_RACE_COIN_ADDRESS!;
+const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_PRIMORDIAL_CONTRACT_ADDRESS!;
+const TOKEN_ADDRESS = process.env.NEXT_PUBLIC_PRIMORDIAL_RACE_COIN_ADDRESS!;
 
 /* ------------- PLACE FIXED BET ------------- */
 export const usePlaceFixedBet = () => {
@@ -83,6 +83,10 @@ export const usePlaceFixedBet = () => {
         });
         await strikeBet(false);
       }
+
+      setTimeout(() => {
+        closeAll();
+      }, 1000);
     };
 
     handleStatusChange();
