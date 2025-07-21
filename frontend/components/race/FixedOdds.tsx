@@ -72,7 +72,7 @@ const FixedOdds = ({ runners, raceStatus, raceId }: FixedOddsProps) => {
                   </PopoverContent>
                 </Popover>
 
-                {runner.finalPosition > 0 && (
+                {runner.finalPosition > 0 && runner.finalPosition < 24 && (
                   <Chip
                     isDisabled
                     className={`ml-auto font-medium px-4 ${
