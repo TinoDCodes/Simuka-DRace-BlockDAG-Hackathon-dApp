@@ -10,6 +10,10 @@ const compat = new FlatCompat({
 });
 
 const eslintConfig = [
+  // 1️⃣ Skip linting everything under typechain-types/
+  {
+    ignores: ["lib/typechain-types/**/*"],
+  },
   ...compat.extends("next/core-web-vitals", "next/typescript"),
 ];
 
