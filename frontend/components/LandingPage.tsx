@@ -9,7 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const RaceChainLanding = () => {
-  const launchDate = useMemo(() => new Date("2025-07-22T00:00:00Z"), []);
+  const launchDate = useMemo(() => new Date("2025-07-31T00:00:00Z"), []);
   const [timeLeft, setTimeLeft] = useState({
     days: "--",
     hours: "--",

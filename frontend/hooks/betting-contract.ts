@@ -8,10 +8,8 @@ import { ethers } from "ethers";
 import { addToast, closeAll } from "@heroui/react";
 import { TokenContractABI } from "@/utils/abis";
 import { useEffect, useState } from "react";
-import {
-  InitiateFixedBetRequest,
-  StrikeBetRequest,
-} from "@/utils/request-types";
+import { customAlphabet } from "nanoid";
+import { StrikeBetRequest } from "@/utils/request-types";
 
 type BetDetails = {
   raceId: number;
@@ -24,13 +22,15 @@ type BetDetails = {
 const CONTRACT_ADDRESS = process.env.NEXT_PUBLIC_PRIMORDIAL_CONTRACT_ADDRESS!;
 const TOKEN_ADDRESS = process.env.NEXT_PUBLIC_PRIMORDIAL_RACE_COIN_ADDRESS!;
 
+const nanoid = customAlphabet("0123456789", 9);
+
 /* ------------- PLACE FIXED BET ------------- */
 export const usePlaceFixedBet = () => {
   const { address } = useAccount();
   const { writeContractAsync } = useWriteContract();
   const [isLoading, setIsLoading] = useState(false);
   const [txHash, setTxHash] = useState<`0x${string}`>();
-  const [betId, setBetId] = useState<number>();
+  const [bet, setBet] = useState<StrikeBetRequest | null>(null);
 
   const { status } = useWaitForTransactionReceipt({
     hash: txHash,
@@ -45,13 +45,18 @@ export const usePlaceFixedBet = () => {
 
   useEffect(() => {
     const strikeBet = async (success: boolean) => {
-      const reqBody: StrikeBetRequest = {
-        betId: betId!,
-        txnId: txHash!,
-        succeeded: success,
-      };
-
       try {
+        if (!bet) {
+          console.error("No bet to strike");
+          return;
+        }
+
+        const reqBody: StrikeBetRequest = {
+          ...bet,
+          transactionId: txHash!,
+          succeeded: success,
+        };
+
         await fetch("/api/bets", {
           method: "POST",
           headers: {
@@ -90,7 +95,7 @@ export const usePlaceFixedBet = () => {
     };
 
     handleStatusChange();
-  }, [status, betId, txHash]);
+  }, [status, bet, txHash]);
 
   const placeFixedBet = async ({
     raceId,
@@ -106,34 +111,22 @@ export const usePlaceFixedBet = () => {
     const scaledOdds = Math.round(odds * 100);
 
     try {
-      const reqBody: InitiateFixedBetRequest = {
-        walletAddress: address,
+      // 2) get unique bet id
+      const betId = Number(nanoid());
+
+      setBet({
+        id: betId,
+        walletAddress: address as string,
         eventId: raceId,
         selectionId: selectionId,
         eventDetails: `race ${raceId}`,
         selectionDetails: selectionDetails,
         stake: stake,
         odds: odds,
-        betType: 0,
-      };
-
-      // 2) get unique bet id
-      const res = await fetch("/api/bets", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(reqBody),
+        betType: 0, // 0 for fixed bet
+        transactionId: "",
+        succeeded: false,
       });
-
-      if (!res.ok) {
-        throw new Error("Failed to place bet");
-      }
-
-      const bet = await res.json();
-      const betId = bet.id;
-
-      setBetId(betId);
 
       // 3) approve
       await writeContractAsync(
@@ -205,7 +198,7 @@ export const usePlacePoolBet = () => {
   const { writeContractAsync } = useWriteContract();
   const [isLoading, setIsLoading] = useState(false);
   const [txHash, setTxHash] = useState<`0x${string}`>();
-  const [betId, setBetId] = useState<number>();
+  const [bet, setBet] = useState<StrikeBetRequest | null>(null);
 
   const { status } = useWaitForTransactionReceipt({
     hash: txHash,
@@ -220,13 +213,18 @@ export const usePlacePoolBet = () => {
 
   useEffect(() => {
     const strikeBet = async (success: boolean) => {
-      const reqBody: StrikeBetRequest = {
-        betId: betId!,
-        txnId: txHash!,
-        succeeded: success,
-      };
-
       try {
+        if (!bet) {
+          console.error("No bet to strike");
+          return;
+        }
+
+        const reqBody: StrikeBetRequest = {
+          ...bet,
+          transactionId: txHash!,
+          succeeded: success,
+        };
+
         await fetch("/api/bets", {
           method: "POST",
           headers: {
@@ -261,50 +259,38 @@ export const usePlacePoolBet = () => {
     };
 
     handleStatusChange();
-  }, [status, betId, txHash]);
+  }, [status, bet, txHash]);
 
   const placePoolBet = async ({
     raceId,
     stake,
     selectionId,
     selectionDetails,
-  }: BetDetails) => {
+    impliedOdds,
+  }: BetDetails & { impliedOdds: number }) => {
     setIsLoading(true);
 
     // 1) scale
     const stakeBN = ethers.parseUnits(stake.toString(), 18);
 
     try {
-      const reqBody: InitiateFixedBetRequest = {
-        walletAddress: address,
+      // 2) get unique bet id
+      const betId = Number(nanoid());
+
+      setBet({
+        id: betId,
+        walletAddress: address as string,
         eventId: raceId,
         selectionId: selectionId,
         eventDetails: `race ${raceId}`,
         selectionDetails: selectionDetails,
         stake: stake,
-        odds: 0,
-        betType: 1,
-      };
-
-      // 2) get unique bet id
-      const res = await fetch("/api/bets", {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(reqBody),
+        odds: impliedOdds,
+        betType: 1, // 1 for pool bet
+        transactionId: "",
+        succeeded: false,
       });
 
-      if (!res.ok) {
-        throw new Error("Failed to place bet");
-      }
-
-      const bet = await res.json();
-      const betId = bet.id;
-
-      setBetId(betId);
-
-      console.log("stake bn", stakeBN);
       // 3) approve
       await writeContractAsync(
         {
