@@ -8,7 +8,7 @@ export const SOCIAL_LINKS: SocialLink[] = [
   },
   {
     platform: "Github",
-    link: "https://github.com/racechain",
+    link: "https://github.com/TinoDCodes/Simuka-DRace-BlockDAG-Hackathon-dApp.git",
     icon: "/icons/github.svg",
   },
 ];
