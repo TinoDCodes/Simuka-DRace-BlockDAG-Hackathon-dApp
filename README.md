@@ -1,6 +1,6 @@
 # RaceChain
 
-RaceChain is a decentralized horse racing protocol that brings transparency, automation, and accessibility to global horse race betting. Built using Solidity, React, C#, and PostgreSQL, RaceChain delivers a trustless, fast, and globally accessible betting experience.
+RaceChain is a decentralized horse racing protocol that brings transparency, automation, and accessibility to global horse race betting. Built using Solidity, NextJS, C#, and PostgreSQL, RaceChain delivers a trustless, fast, and globally accessible betting experience.
 
 ![RaceChain Banner](frontend/public/racechain-banner.png)
 
