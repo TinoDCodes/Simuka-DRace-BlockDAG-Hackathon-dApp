@@ -1,28 +1,30 @@
-# RaceChain - On-Chain Horse Race Betting Platform
+# RaceChain
+
+RaceChain is a decentralized horse racing protocol that brings transparency, automation, and accessibility to global horse race betting. Built using Solidity, React, C#, and PostgreSQL, RaceChain delivers a trustless, fast, and globally accessible betting experience.
 
 ![RaceChain Banner](frontend/public/racechain-banner.png)
 
-## Overview
-
-RaceChain revolutionizes online horse race betting by bringing it fully on-chain using smart contracts, AI-generated fixed odds, and decentralized liquidity pools. By reducing traditional platform fees from ~10% to 1%, ensuring full transparency, and leveraging the scalability of Block DAG infrastructure, RaceChain creates a trustless, fast, and fair betting experience for a global audience.
-
-**Key Features**:
-- 🏇 AI-powered odds generation using historical data
+## 🚀 Features
+- 🏇 On-chain horse race betting (fixed odds and tote liquidity options)
 - 💸 Only 1% platform fees (vs traditional 10-15%)
-- 🔒 Fully on-chain betting with smart contracts
+- 🔗 Smart contract-based payouts and liquidity management
 - ⚡ Block DAG infrastructure for high scalability
+- 📊 Immutable race history and odds transparency
+- 👥 DAO and AI-driven odds engine
 - 🌐 Global access to horse racing markets
+- 💡 Real-time racing data ingestion
 - 💰 Decentralized liquidity pools
-- 📊 Transparent betting history and results
 
 ## Table of Contents
-- [Installation](#installation)
-- [Usage](#usage)
-- [Technology Stack](#technology-stack)
-- [Project Structure](#project-structure)
+- [Installation](#-local-setup)
+- [Usage](#-usage)
+- [Technology Stack](#%EF%B8%8F-technology-stack)
+- [Project Structure](#-project-structure)
 - [License](#license)
 
-## Installation
+---
+
+## 🧪 Local Setup
 
 ### Prerequisites
 - Node.js (v18+)
@@ -53,53 +55,36 @@ RaceChain revolutionizes online horse race betting by bringing it fully on-chain
 4. **Configure environment variables**:
    - Create `.env` files in both `dApp` and `frontend` directories based on the provided `.env.example` files
    - Add your Infura/Alchemy API keys, wallet private key (for deployment), and other required secrets
-   - Create a parameters.json file in the ignition folder and populate it with the relevant parameters for contract deployment. (see hardhat ignition docs)
+  
 
-5. **Compile and deploy smart contracts**:
-   ```bash
-   cd ../dApp
-   npx hardhat compile
-   npx hardhat ignition deploy .\ignition\modules\<deployment-module> --network primordial --parameters .\ignition\<path-to-parameters-json-file>
-   ```
+## 🔧 Usage
 
-## Usage
+### Compile & Deploy Smart Contracts
 
-### Running the Development Environment
+1. Set up `parameters.json` in the `ignition` folder with relevant contract deployment params.
 
-1. **Start the local blockchain (in dApp folder)**:
+2. **Compile the smart contracts**:
    ```bash
    cd dApp
-   npx hardhat node
+   npx hardhat compile
    ```
 
-2. **Deploy contracts to local network**:
+3. **Deploy contracts**:
    ```bash
-   npx hardhat ignition deploy .\ignition\modules\<deployment-module> --network localhost --parameters .\ignition\<path-to-parameters-file>
+   npx hardhat ignition deploy .\ignition\modules\<cdeployment-module> --network <network-name> --parameters .\ignition\<path-to-parameters-file>
    ```
+(See the Hardhat and Hardhat Ignition documentations for more information.)
 
-3. **Start the frontend development server (in frontend folder)**:
+### Run Frontend (Next.js)
+
+1. Navigate to `frontend/`
+2. Install and run:
    ```bash
-   cd ../frontend
    npm run dev
    ```
+---
 
-4. **Access the application**:
-   Open your browser and navigate to `http://localhost:3000`
-
-### Production Build
-
-1. **Build the frontend**:
-   ```bash
-   cd frontend
-   npm run build
-   ```
-
-2. **Start the production server**:
-   ```bash
-   npm run start
-   ```
-
-## Technology Stack
+## ⚙️ Technology Stack
 
 ### Smart Contracts (dApp folder)
 - **Solidity**: For writing smart contracts
@@ -117,13 +102,15 @@ RaceChain revolutionizes online horse race betting by bringing it fully on-chain
 - **Framer Motion**: Animation library
 - **RainbowKit**: Wallet adapter library
 
-### Infrastructure
-- **Block DAG**: Scalable blockchain infrastructure
-- **IPFS**: Decentralized file storage
-- **The Graph**: Decentralized query protocol
-- **Chainlink Oracles**: Real-world data integration
+### Backend (Hosted Privately)
+- ASP.NET Core (C#) + EF Core
+- PostgreSQL
+- Nethereum
+- Chainlink Oracle (planned)
+- Docker + Azure App Services (deployment)
+- Serilog + Application Insights (monitoring)
 
-## Project Structure
+## 📂 Project Structure
 
 ```
 RaceChain/
@@ -150,34 +137,23 @@ RaceChain/
 └── README.md                # This file
 ```
 
-## License
+## 💰 Revenue Model
 
-RaceChain is released under the [MIT License](LICENSE).
-
-```text
-MIT License
-
-Copyright (c) 2023 RaceChain
-
-Permission is hereby granted, free of charge, to any person obtaining a copy
-of this software and associated documentation files (the "Software"), to deal
-in the Software without restriction, including without limitation the rights
-to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-copies of the Software, and to permit persons to whom the Software is
-furnished to do so, subject to the following conditions:
-
-The above copyright notice and this permission notice shall be included in all
-copies or substantial portions of the Software.
-
-THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
-SOFTWARE.
-```
+- 🏛️ DAO collects a small settlement fee on liquidity pool settlements.
+- 🤖 Stakers co-own the AI model that generates odds and trading signals.
+- 🔄 A tiny fee is applied to peer-to-peer betswaps.
+- 💸 Revenue is distributed between the DAO treasury and staking participants.
 
 ---
 
-**RaceChain** is developed by Simuka Solutions - Bringing transparency and fairness to the $120B+ horse racing industry through blockchain technology.
+## 🧠 About
+
+RaceChain is developed by **Simuka Solutions**, a blockchain innovation firm focused on real-world decentralized applications in sports, finance, and governance.
+
+🌐 Visit us: [simukasolutions.com](https://simukasolutions.com)
+
+---
+
+## 🪪 License
+
+MIT License. See [LICENSE](./LICENSE) for details.
