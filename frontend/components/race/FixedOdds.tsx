@@ -55,7 +55,7 @@ const FixedOdds = ({ runners, raceStatus, raceId }: FixedOddsProps) => {
                     {runner.name}
                   </p>
                   <p className="text-sm text-slate-400 text-nowrap">
-                    {runner.jockey}
+                    <span className="font-medium">Jockey:</span> {runner.jockey}
                   </p>
                 </div>
 
