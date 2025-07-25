@@ -59,7 +59,7 @@ RaceChain revolutionizes online horse race betting by bringing it fully on-chain
    ```bash
    cd ../dApp
    npx hardhat compile
-   npx hardhat ignition deploy .\ignition\modules\<deployment-module> --network primordial --parameters .\ignition\<path-to-parameters-file>
+   npx hardhat ignition deploy .\ignition\modules\<deployment-module> --network primordial --parameters .\ignition\<path-to-parameters-json-file>
    ```
 
 ## Usage
