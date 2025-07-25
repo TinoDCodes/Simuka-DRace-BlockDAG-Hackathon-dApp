@@ -9,7 +9,7 @@ import Image from "next/image";
 import Link from "next/link";
 
 const RaceChainLanding = () => {
-  const launchDate = useMemo(() => new Date("2025-07-22T00:00:00Z"), []);
+  const launchDate = useMemo(() => new Date("2025-07-31T00:00:00Z"), []);
   const [timeLeft, setTimeLeft] = useState({
     days: "--",
     hours: "--",
@@ -433,23 +433,14 @@ const RaceChainLanding = () => {
               </div>
             </div>
 
-            <div className="bg-[#1b1138] rounded-[var(--radius-base)] border border-[var(--color-border)] p-8">
-              <div className="grid grid-cols-3 gap-4">
-                {[...Array(9)].map((_, index) => (
-                  <div
-                    key={index}
-                    className="aspect-square bg-[#121022] border border-[var(--color-border)] rounded-lg flex items-center justify-center"
-                  >
-                    <div className="text-[var(--color-primary)] font-mono text-sm">
-                      0x{index.toString(16)}
-                    </div>
-                  </div>
-                ))}
-              </div>
-              <div className="mt-6 text-center text-gray-400">
-                Block DAG infrastructure for high scalability
-              </div>
-            </div>
+            {/* replace below */}
+            <iframe
+              className="rounded-lg shadow-lg aspect-video w-full"
+              src={`https://www.youtube.com/embed/${process.env.NEXT_PUBLIC_YOUTUBE_VIDEO_ID}?autoplay=0&rel=0`}
+              title="RaceChain Overview"
+              allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+              allowFullScreen
+            />
           </div>
         </div>
       </section>
@@ -493,6 +484,8 @@ const RaceChainLanding = () => {
                   href={link}
                   aria-label={`${platform} link`}
                   className="p-2 rounded-full hover:bg-white/10 transition-colors"
+                  target="_blank"
+                  rel="noopener noreferrer"
                 >
                   <Image
                     src={icon}

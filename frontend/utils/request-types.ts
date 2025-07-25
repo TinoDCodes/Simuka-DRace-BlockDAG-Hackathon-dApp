@@ -1,6 +1,14 @@
 export type StrikeBetRequest = {
-  betId: number;
-  txnId: string;
+  id: number;
+  walletAddress: string;
+  eventId: number;
+  selectionId: number;
+  eventDetails: string;
+  selectionDetails: string;
+  stake: number;
+  odds: number;
+  betType: number;
+  transactionId: string;
   succeeded: boolean;
 };
 

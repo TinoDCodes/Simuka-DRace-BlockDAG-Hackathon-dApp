@@ -19,7 +19,7 @@ export default async function MeetingsPage({
   return (
     <div className="w-full h-full grow flex flex-col items-center space-y-2">
       <div className="w-fit py-1 px-3 border border-accent/15 rounded-xl text-xs text-accent">
-        {selectedDateFormatted}
+        {selectedDateFormatted} (UTC)
       </div>
 
       <DateSelect date={selectedDate} />

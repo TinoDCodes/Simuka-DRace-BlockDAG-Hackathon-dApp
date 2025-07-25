@@ -53,6 +53,7 @@ const PlacePoolBetDrawer = ({
       odds: 0,
       selectionId: parseInt(selectedPool!.id),
       selectionDetails: `${selectedPool!.number}. ${selectedPool!.name}`,
+      impliedOdds: selectedPool!.impliedOdds,
     });
     setInputValue("0.00");
     setBetAmount(0);
